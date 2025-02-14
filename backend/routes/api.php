@@ -8,4 +8,3 @@ use App\Http\Controllers\BalanceController;
 
 
 Route::resource('ledger', LedgerController::class);
-Route::resource('balance', BalanceController::class);

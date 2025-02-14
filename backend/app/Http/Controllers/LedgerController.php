@@ -15,22 +15,53 @@ class LedgerController extends Controller
         $this->ledgerFile = storage_path('app/ledger/transactions.ledger');
     }
 
-    public function index()
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
     {
-        $process = new Process(['ledger', '-f', $this->ledgerFile, '--no-total Assets']);
+        $category = strtolower($request->input('category'));
+
+        $process = new Process(['ledger', '-f', $this->ledgerFile, 'balance', "--no-total", $category]);
         $process->run();
 
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
 
+        // Get the output as a single string
+        $output = $process->getOutput();
+
+        // Split the output into parts (amount + account)
+        // Regex splits on amounts (₱ followed by numbers)
+        $parts = preg_split('/(?=₱[\d,.]+)/', trim($output), -1, PREG_SPLIT_NO_EMPTY);
+
+        $result = [];
+        $total = 0.0;
+
+        foreach ($parts as $part) {
+            // Match the amount and account name in each part
+            if (preg_match('/^(₱[\d,.]+)\s+(.*)$/', trim($part), $matches)) {
+                $amount = $matches[1]; // e.g., ₱239.00
+                $account = rtrim($matches[2], ':'); // Remove trailing colon if present
+
+                // Convert account name to lowercase and exclude the specified category
+                $account = strtolower($account);
+                if ($account !== $category) {
+                    // Convert the amount to a numeric value (remove ₱ and commas)
+                    $numericAmount = (float)str_replace(['₱', ','], '', $amount);
+                    $total += $numericAmount; // Add to total
+                    $result[$account] = $amount; // Add to result
+                }
+            }
+        }
+
         return response()->json([
-            'output' => $process->getOutput(),
+            "message" => "Successfully fetched balance for $category",
+            "balance" => $result,
+            "total" => "₱" . number_format($total, 2), // Format total as currency
         ]);
-
-        return response()->json(['message' => 'Ledger balance retrieved successfully.'], 200);
     }
-
     /**
      * Show the form for creating a new resource.
      */
