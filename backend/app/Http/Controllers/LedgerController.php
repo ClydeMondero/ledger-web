@@ -75,7 +75,31 @@ class LedgerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $amount = $request->input('amount');
+        $payee = $request->input('payee');
+        $date = $request->input('date');
+        $recipient = $request->input('recipient');
+        $sender = $request->input('sender');
+
+        // Validate required fields
+        if (!$amount || !$payee || !$date || !$recipient || !$sender) {
+            return response()->json(["message" => "All fields are required."], 400);
+        }
+
+        // Construct the ledger transaction entry
+        $transaction = <<<EOL
+$date $payee
+    $sender    -$amount
+    $recipient  $amount
+EOL;
+
+        // Append the transaction to the ledger file
+        file_put_contents($this->ledgerFile, "\n" . $transaction, FILE_APPEND);
+
+        return response()->json([
+            "message" => "Successfully added $amount from $sender to $recipient at $date",
+            "transaction" => $transaction,
+        ]);
     }
 
     /**
