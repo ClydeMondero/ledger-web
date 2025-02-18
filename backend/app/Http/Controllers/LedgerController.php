@@ -20,9 +20,51 @@ class LedgerController extends Controller
      */
     public function index(Request $request)
     {
-        $category = strtolower($request->input('category'));
+        $account = strtolower($request->input('account'));
 
-        $process = new Process(['ledger', '-f', $this->ledgerFile, 'balance', "--no-total", $category]);
+        //give accounts if no account is given
+        if (!$account) {
+            //get accounts from ledger file
+            $process = new Process(['ledger', '-f', $this->ledgerFile,  'accounts']);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+
+            // Get the output as a single string
+            $output = $process->getOutput();
+
+            // Split the raw data into lines
+            $lines = explode("\n", $output);
+            $topLevelAccounts = [];
+
+            foreach ($lines as $line) {
+                $line = strtolower(trim($line)); // Remove extra spaces and make lowercase
+
+                if (empty($line)) {
+                    continue; // Skip empty lines
+                }
+
+                // Split each line into parts by ":"
+                $parts = explode(":", strtolower(trim($line)));
+                $topLevel = $parts[0]; // First part is the top-level account
+
+                // Add top-level account to the array if it's not already included
+                if (!in_array($topLevel, $topLevelAccounts)) {
+                    $topLevelAccounts[] = $topLevel;
+                }
+            }
+
+
+            //return array of accounts
+            return response()->json([
+                'message' => 'Successfully fetched accounts',
+                'accounts' => $topLevelAccounts
+            ]);
+        }
+
+        $process = new Process(['ledger', '-f', $this->ledgerFile, 'balance', "--no-total", $account]);
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -43,21 +85,21 @@ class LedgerController extends Controller
             // Match the amount and account name in each part
             if (preg_match('/^(₱[\d,.]+)\s+(.*)$/', trim($part), $matches)) {
                 $amount = $matches[1]; // e.g., ₱239.00
-                $account = rtrim($matches[2], ':'); // Remove trailing colon if present
+                $formatted_account = rtrim($matches[2], ':'); // Remove trailing colon if present
 
                 // Convert account name to lowercase and exclude the specified category
-                $account = strtolower($account);
-                if ($account !== $category) {
+                $formatted_account = strtolower($formatted_account);
+                if ($formatted_account !== $account) {
                     // Convert the amount to a numeric value (remove ₱ and commas)
                     $numericAmount = (float)str_replace(['₱', ','], '', $amount);
                     $total += $numericAmount; // Add to total
-                    $result[$account] = $amount; // Add to result
+                    $result[$formatted_account] = $amount; // Add to result
                 }
             }
         }
 
         return response()->json([
-            "message" => "Successfully fetched balance for $category",
+            "message" => "Successfully fetched balance for $account",
             "balance" => $result,
             "total" => "₱" . number_format($total, 2), // Format total as currency
         ]);
