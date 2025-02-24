@@ -56,14 +56,14 @@ const balances = () => {
     getCategories();
   }, []);
 
-  useEffect(() => {
-    console.log(balances);
-  }, [balances]);
+  // useEffect(() => {
+  //   console.log(balances);
+  // }, [balances]);
 
   return (
-    <div className="container vh-100">
-      <div className="row align-items-center justify-content-center h-100">
-        <div className="col-6">
+    <div className="container-sm ">
+      <div className="row min-vh-100 justify-content-center align-items-center">
+        <div className="col-md-6 col-sm-12">
           <p className="h3">Check balances</p>
           <Formik
             initialValues={initialValues}
@@ -71,7 +71,7 @@ const balances = () => {
             onSubmit={handleSubmit}
           >
             {({ isSubmitting }) => (
-              <Form className="border p-4 rounded shadow-sm">
+              <Form className="bg-white border p-4 rounded shadow-sm">
                 <div className="row">
                   <label htmlFor="account" className="form-label">
                     Account Type
@@ -82,6 +82,7 @@ const balances = () => {
                       className="form-control"
                       options={accounts}
                       component={SingleSelect}
+                      setBalances={setBalances}
                     />
                   </div>
 
@@ -101,17 +102,43 @@ const balances = () => {
 
                 {balances &&
                   (balances.length != 0 ? (
-                    <div>
-                      <p>Balances for {selectedAccount}:</p>
-                      {Object.keys(balances).map((key, index) => (
-                        <p key={index}>
-                          <span>{capitalizeFirstLetter(key)} </span>
-                          <span>{balances[key]}</span>
-                        </p>
-                      ))}
-                    </div>
+                    <table className="table table-striped  table-bordered mt-4">
+                      <thead>
+                        <tr className="table-light">
+                          <th
+                            className="text-success bg-success text-white"
+                            scope="col"
+                          >
+                            #
+                          </th>
+                          <th
+                            className="text-success bg-success text-white"
+                            scope="col"
+                          >
+                            Sub-Account
+                          </th>
+                          <th
+                            className="text-success bg-success text-white"
+                            scope="col "
+                          >
+                            Amount
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Object.keys(balances).map((key, index) => (
+                          <tr>
+                            <td scope="row">{index + 1}</td>
+                            <td>{capitalizeFirstLetter(key)}</td>
+                            <td>{balances[key]}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   ) : (
-                    <div>No balances found for {selectedAccount}</div>
+                    <p className="text-warning">
+                      No balances found for {selectedAccount} account
+                    </p>
                   ))}
               </Form>
             )}
