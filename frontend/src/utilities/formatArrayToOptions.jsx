@@ -1,6 +1,4 @@
-function capitalizeFirstLetter(val) {
-  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-}
+import capitalizeFirstLetter from "./capitalizeFirstLetter";
 
 const formatArrayToOptions = (array) => {
   const formattedArray = [];
