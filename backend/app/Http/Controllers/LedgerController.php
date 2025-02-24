@@ -60,7 +60,8 @@ class LedgerController extends Controller
             //return array of accounts
             return response()->json([
                 'message' => 'Successfully fetched accounts',
-                'accounts' => $topLevelAccounts
+                'accounts' => $topLevelAccounts,
+                'success' => true
             ]);
         }
 

@@ -7,8 +7,5 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "react-select": "^5.10.0"
-  }
+  "description": ""
 }

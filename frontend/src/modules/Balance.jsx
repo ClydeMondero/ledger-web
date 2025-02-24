@@ -1,25 +1,48 @@
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import SingleSelect from "../components/SingleSelect";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import formatArrayToOptions from "../utilities/formatArrayToOptions";
 
 const Balance = () => {
+  const [accounts, setAccounts] = useState([]);
   const validationSchema = Yup.object({
-    category: Yup.string().required("Category is required"),
+    account: Yup.string().required("Account is required"),
   });
 
   const initialValues = {
-    category: "",
+    account: "",
   };
 
   const handleSubmit = (values) => {
     console.log(values);
   };
 
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/ledger");
+        if (response.data.success) {
+          const formattedAccounts = formatArrayToOptions(
+            response.data.accounts
+          );
+
+          setAccounts(formattedAccounts);
+        } else {
+          console.log("Error fetching accounts");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    getCategories();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(accounts);
+  // }, [accounts]);
 
   return (
     <div className="container vh-100">
@@ -34,17 +57,17 @@ const Balance = () => {
             {({ isSubmitting }) => (
               <Form className="border p-4 rounded shadow-sm">
                 <div className="mb-3">
-                  <label htmlFor="category" className="form-label">
-                    Category
+                  <label htmlFor="account" className="form-label">
+                    Account Type
                   </label>
                   <Field
-                    name="category"
+                    name="account"
                     className="form-control"
-                    options={options}
+                    options={accounts}
                     component={SingleSelect}
                   />
                   <ErrorMessage
-                    name="category"
+                    name="account"
                     component="div"
                     className="text-danger"
                   />
