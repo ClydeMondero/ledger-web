@@ -64,7 +64,7 @@ const balances = () => {
     <div className="container-sm ">
       <div className="row min-vh-100 justify-content-center align-items-center">
         <div className="col-md-6 col-sm-12">
-          <p className="h3">Check balances</p>
+          <p className="h3">Balances</p>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -102,23 +102,23 @@ const balances = () => {
 
                 {balances &&
                   (balances.length != 0 ? (
-                    <table className="table table-striped  table-bordered mt-4">
+                    <table className="table mt-4">
                       <thead>
                         <tr className="table-light">
                           <th
-                            className="text-success bg-success text-white"
+                            className="bg-primary-subtle text-primary"
                             scope="col"
                           >
                             #
                           </th>
                           <th
-                            className="text-success bg-success text-white"
+                            className="bg-primary-subtle text-primary"
                             scope="col"
                           >
                             Sub-Account
                           </th>
                           <th
-                            className="text-success bg-success text-white"
+                            className="bg-primary-subtle text-primary"
                             scope="col "
                           >
                             Amount
