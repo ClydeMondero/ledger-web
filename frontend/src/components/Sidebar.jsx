@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+  const location = useLocation();
   return (
     <nav className="navbar bg-light shadow-sm fixed-top">
       <div className="container-fluid">
@@ -39,13 +40,23 @@ const Sidebar = () => {
           </div>
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-              <li className="nav-item">
-                <Link to="/" className="nav-link">
+              <li className="nav-item" data-bs-toggle="offcanvas">
+                <Link
+                  to="/"
+                  className={`nav-link ${
+                    location.pathname == "/" ? "fw-bold" : ""
+                  }`}
+                >
                   Home
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link to="/balance" className="nav-link">
+              <li className="nav-item" data-bs-toggle="offcanvas">
+                <Link
+                  to="/balance"
+                  className={`nav-link ${
+                    location.pathname == "/balance" ? "fw-bold" : ""
+                  }`}
+                >
                   Balance
                 </Link>
               </li>
