@@ -4,5 +4,13 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    function ({ addComponents }) {
+      addComponents({
+        ".transition": {
+          "@apply transition-all delay-150 duration-300 ease-in-out": {},
+        },
+      });
+    },
+  ],
 };
