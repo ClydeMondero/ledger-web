@@ -18,6 +18,25 @@ const Box = ({ balance, account }) => {
   );
 };
 
+const Transaction = ({ accounts, balance, payee, date }) => {
+  return (
+    <div className="text-gray-500 bg-blue-50 p-4 rounded-lg">
+      <span className="font-semibold text-lg block">
+        {accounts || <Skeleton />}
+      </span>
+      <div className="flex items-center justify-between">
+        <span className="text-3xl text-blue-500 font-medium">
+          {balance || <Skeleton />}
+        </span>
+        <div className="text-right">
+          <span className="block">{payee || <Skeleton />}</span>
+          <span className="text-sm">{date || <Skeleton />}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Dashboard = () => {
   return (
     <SkeletonTheme
@@ -41,13 +60,10 @@ const Dashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         >
-          <span className="text-2xl">Transactions</span>
+          <span className="text-2xl font-medium">Transactions</span>
           <div className="flex flex-col gap-2">
-            <Skeleton width={250} height={25} />
-            <Skeleton width={250} height={25} />
-            <Skeleton width={250} height={25} />
-            <Skeleton width={250} height={25} />
-            <Skeleton width={250} height={25} />
+            <Transaction />
+            <Transaction />
           </div>
         </motion.div>
         <motion.div
@@ -56,9 +72,8 @@ const Dashboard = () => {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="bg-blue-100 col-span-8 row-span-8 rounded-md flex flex-col gap-4 p-5"
         >
-          <span className="text-2xl">Net Worth</span>
+          <span className="text-2xl font-medium">Net Worth</span>
           <NetWorthChart />
-          {/* <Skeleton width={715} height={225} /> */}
         </motion.div>
       </div>
     </SkeletonTheme>

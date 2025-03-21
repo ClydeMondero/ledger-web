@@ -16,7 +16,7 @@ const Content = () => {
   return (
     <div className="row-span-12 col-span-10 flex flex-col gap-4">
       <motion.span
-        className="text-4xl p-5"
+        className="text-4xl font-semibold p-5"
         key={title} // Ensures animation runs on change
         initial={{ opacity: 0, y: -5 }}
         animate={{ opacity: 1, y: 0 }}
