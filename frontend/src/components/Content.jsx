@@ -1,6 +1,5 @@
 import { useLocation, Routes, Route, Navigate } from "react-router-dom";
 import capitalizeFirstLetter from "../utilities/capitalizeFirstLetter";
-import { AnimatePresence } from "motion/react";
 import * as motion from "motion/react-client";
 import Dashboard from "../pages/Dashboard";
 import NotFound from "../pages/NotFound";
@@ -15,7 +14,7 @@ const Content = () => {
   const today = new Date().getFullYear();
 
   return (
-    <div className="flex-1 flex flex-col gap-4">
+    <div className="row-span-12 col-span-10 flex flex-col gap-4">
       <motion.span
         className="text-4xl p-5"
         key={title} // Ensures animation runs on change
@@ -25,7 +24,7 @@ const Content = () => {
       >
         {title}
       </motion.span>
-      <div className="flex-1 p-5">
+      <div className="flex-1 px-5">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />
