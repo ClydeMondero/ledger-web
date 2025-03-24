@@ -3,3 +3,15 @@
 body {
   background-color: #f8f9fa;
 }
+
+.table-header {
+  @apply bg-blue-500 text-white font-bold;
+}
+
+.table-cell {
+  @apply px-4 py-2 border-b border-blue-200;
+}
+
+.MuiSkeleton-root {
+  background-color: #8ec5ff !important;
+}
