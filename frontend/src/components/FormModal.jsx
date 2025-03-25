@@ -113,7 +113,7 @@ const FormModal = ({ open, onClose, fields }) => {
                 boxShadow: 0,
               }}
             >
-              Submit
+              Save
             </Button>
           </Box>
         </form>

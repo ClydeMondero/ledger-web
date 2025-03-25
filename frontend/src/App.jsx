@@ -5,7 +5,7 @@ import Content from "./components/Content";
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="grid grid-cols-12 grid-row-12 h-dvh">
+      <div className="grid grid-cols-12 grid-row-12 h-dvh relative">
         <Sidebar />
         <Content />
       </div>

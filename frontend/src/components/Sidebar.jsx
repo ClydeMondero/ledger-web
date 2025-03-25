@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { MdDashboard, MdAccountBalanceWallet } from "react-icons/md";
 import { FaMoneyBillWave, FaCalculator } from "react-icons/fa";
 import { GrTransaction } from "react-icons/gr";
 import { Link, useLocation } from "react-router-dom";
+import CalculatorModal from "./CalculatorModal";
 
 const Nav = ({ icon: Icon, title }) => {
   const path = "/" + title.toLowerCase();
@@ -23,6 +25,8 @@ const Nav = ({ icon: Icon, title }) => {
 };
 
 const Sidebar = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="row-span-12 col-span-2 p-6 shadow-md flex flex-col gap-8">
       <span className="text-blue-500 text-2xl font-medium text-center">
@@ -36,8 +40,18 @@ const Sidebar = () => {
         <Nav icon={GrTransaction} title="Transactions" />
       </div>
       <div className="flex justify-end">
-        <FaCalculator className="text-2xl text-blue-500" />
+        <FaCalculator
+          className="text-2xl text-blue-500 cursor-pointer"
+          onClick={() => setIsModalOpen(true)}
+        />
       </div>
+
+      {isModalOpen && (
+        <CalculatorModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
