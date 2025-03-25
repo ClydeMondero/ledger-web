@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { FaPlusCircle } from "react-icons/fa";
 import * as motion from "motion/react-client";
+import formatMoney from "../utilities/formatMoney";
 
-export default function DataTable({ rows, columns, loading }) {
+export default function DataTable({
+  rows,
+  columns,
+  loading,
+  search = false,
+  addButton = false,
+  sum,
+}) {
   const [searchText, setSearchText] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const total = filteredRows.reduce((acc, row) => acc + row[sum], 0);
+    setTotal(total);
+  }, [filteredRows]);
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -28,45 +42,67 @@ export default function DataTable({ rows, columns, loading }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchText}
-          onChange={handleSearch}
-          className="col-span-8 py-3 px-6 border-2 border-blue-100 bg-blue-50 rounded-lg focus:outline-0"
-        />
-        <button
-          type="button"
-          className="col-span-4 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
-          onClick={() => console.log("Add button clicked")}
-        >
-          <FaPlusCircle />
-          ADD
-        </button>
+        {search ? (
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={handleSearch}
+            className={`col-span-${
+              addButton ? 8 : 12
+            } py-3 px-6 border-2 border-blue-100 bg-blue-50 rounded-lg focus:outline-0`}
+          />
+        ) : (
+          <div className="col-span-12"></div>
+        )}
+        {addButton && (
+          <button
+            type="button"
+            className={`col-span-${
+              search ? 4 : 12
+            } flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg`}
+            onClick={() => console.log("Add button clicked")}
+          >
+            <FaPlusCircle />
+            ADD
+          </button>
+        )}
       </motion.div>
-      <DataGrid
-        rows={filteredRows}
-        loading={loading}
-        slotProps={{
-          loadingOverlay: {
-            variant: "linear-progress",
-            noRowsVariant: "skeleton",
-          },
-        }}
-        columns={columns}
-        disableRowSelectionOnClick
-        getRowClassName={(params) => `table-row`}
-        initialState={{
-          pagination: {
-            paginationModel: { pageSize: 5, page: 0 },
-          },
-        }}
-        sx={{
-          "& .MuiDataGrid-row:hover": {
-            backgroundColor: "#DBEAFE",
-          },
-        }}
-      />
+      <motion.div
+        className="relative"
+        initial={{ opacity: 0, y: -5 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+      >
+        <DataGrid
+          rows={filteredRows}
+          loading={loading}
+          slotProps={{
+            loadingOverlay: {
+              variant: "linear-progress",
+              noRowsVariant: "skeleton",
+            },
+          }}
+          columns={columns}
+          disableRowSelectionOnClick
+          getRowClassName={(params) => `table-row`}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 5, page: 0 },
+            },
+          }}
+          sx={{
+            "& .MuiDataGrid-row:hover": {
+              backgroundColor: "#DBEAFE",
+            },
+          }}
+        />
+        {sum && (
+          <span className="absolute bottom-[1rem] left-4 text-sm text-blue-500 font-medium">
+            Total: {formatMoney(total)}
+          </span>
+        )}
+      </motion.div>
     </div>
   );
 }
