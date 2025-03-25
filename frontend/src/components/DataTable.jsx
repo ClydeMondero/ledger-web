@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { FaPlusCircle } from "react-icons/fa";
 import * as motion from "motion/react-client";
 import formatMoney from "../utilities/formatMoney";
+import FormModal from "./FormModal";
 
 export default function DataTable({
   rows,
@@ -11,10 +12,12 @@ export default function DataTable({
   search = false,
   button = false,
   sum,
+  fields,
 }) {
   const [searchText, setSearchText] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
   const [total, setTotal] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const total = filteredRows.reduce((acc, row) => acc + row[sum], 0);
@@ -31,6 +34,10 @@ export default function DataTable({
       )
     );
     setFilteredRows(filteredData);
+  };
+
+  const handleAddClick = () => {
+    setIsModalOpen(true);
   };
 
   return (
@@ -61,7 +68,7 @@ export default function DataTable({
             className={`col-span-${
               search ? 4 : 12
             } flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg`}
-            onClick={() => console.log("Add button clicked")}
+            onClick={handleAddClick}
           >
             <FaPlusCircle />
             NEW
@@ -77,15 +84,9 @@ export default function DataTable({
         <DataGrid
           rows={filteredRows}
           loading={loading}
-          slotProps={{
-            loadingOverlay: {
-              variant: "linear-progress",
-              noRowsVariant: "skeleton",
-            },
-          }}
           columns={columns}
           disableRowSelectionOnClick
-          getRowClassName={(params) => `table-row`}
+          getRowClassName={() => `table-row`}
           initialState={{
             pagination: {
               paginationModel: { pageSize: 6, page: 0 },
@@ -103,6 +104,13 @@ export default function DataTable({
           </span>
         )}
       </motion.div>
+      {fields && (
+        <FormModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          fields={fields}
+        />
+      )}
     </div>
   );
 }

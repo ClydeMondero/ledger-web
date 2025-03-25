@@ -1,10 +1,14 @@
-import React from "react";
+import { useState } from "react";
 import { FaPen, FaTrash } from "react-icons/fa";
 import DataTable from "../components/DataTable";
 import formatMoney from "../utilities/formatMoney";
 import { formatDate, formatToMMDDYYYY } from "../utilities/formatDate";
 
 const Transactions = () => {
+  const [accounts, setAccounts] = useState(
+    Array.from({ length: 20 }, (_, i) => `Account ${i + 1}`)
+  );
+
   const rows = Array.from({ length: 100 }, (_, i) => ({
     id: i + 1,
     date: new Date(Date.now() - i * 24 * 60 * 60 * 1000)
@@ -15,6 +19,13 @@ const Transactions = () => {
     to_account: `To Account ${i + 1}`,
     from_account: `From Account ${i + 1}`,
   }));
+
+  const handleAddAccount = (newAccount) => {
+    if (!accounts.includes(newAccount)) {
+      setAccounts([...accounts, newAccount]);
+      console.log("New Account Added:", newAccount);
+    }
+  };
 
   const handleEdit = (id) => {
     console.log("Edit clicked for ID:", id);
@@ -91,9 +102,47 @@ const Transactions = () => {
     },
   ];
 
+  const transactionFields = [
+    {
+      name: "payee",
+      label: "Payee",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "balance",
+      label: "Balance",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "from_account",
+      label: "From Account",
+      type: "select",
+      required: true,
+      options: accounts,
+      onAddOption: handleAddAccount,
+    },
+    {
+      name: "to_account",
+      label: "To Account",
+      type: "select",
+      required: true,
+      options: accounts,
+      onAddOption: handleAddAccount,
+    },
+  ];
+
   return (
     <div className="h-full grid-cols-12 grid-rows-12">
-      <DataTable columns={columns} rows={rows} loading={false} search button />
+      <DataTable
+        columns={columns}
+        rows={rows}
+        fields={transactionFields}
+        loading={false}
+        search
+        button
+      />
     </div>
   );
 };

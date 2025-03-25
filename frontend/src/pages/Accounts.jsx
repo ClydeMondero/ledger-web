@@ -35,6 +35,21 @@ const Accounts = () => {
     { id: 13, account: "Liabilities:CreditCard", description: "Credit card" },
   ];
 
+  const accountFields = [
+    {
+      name: "accountName",
+      label: "Account Name",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "description",
+      label: "Description",
+      type: "text",
+      required: false,
+    },
+  ];
+
   const handleEdit = (id) => {
     console.log("Edit clicked for ID:", id);
   };
@@ -81,7 +96,14 @@ const Accounts = () => {
 
   return (
     <div className="h-full grid-cols-12 grid-rows-12">
-      <DataTable columns={columns} rows={rows} loading={false} search button />
+      <DataTable
+        columns={columns}
+        rows={rows}
+        fields={accountFields}
+        loading={false}
+        search
+        button
+      />
     </div>
   );
 };
