@@ -9,7 +9,7 @@ export default function DataTable({
   columns,
   loading,
   search = false,
-  addButton = false,
+  button = false,
   sum,
 }) {
   const [searchText, setSearchText] = useState("");
@@ -49,13 +49,13 @@ export default function DataTable({
             value={searchText}
             onChange={handleSearch}
             className={`col-span-${
-              addButton ? 8 : 12
+              button ? 8 : 12
             } py-3 px-6 border-2 border-blue-100 bg-blue-50 rounded-lg focus:outline-0`}
           />
         ) : (
           <div className="col-span-12"></div>
         )}
-        {addButton && (
+        {button && (
           <button
             type="button"
             className={`col-span-${
@@ -64,7 +64,7 @@ export default function DataTable({
             onClick={() => console.log("Add button clicked")}
           >
             <FaPlusCircle />
-            ADD
+            NEW
           </button>
         )}
       </motion.div>
@@ -88,7 +88,7 @@ export default function DataTable({
           getRowClassName={(params) => `table-row`}
           initialState={{
             pagination: {
-              paginationModel: { pageSize: 5, page: 0 },
+              paginationModel: { pageSize: 6, page: 0 },
             },
           }}
           sx={{

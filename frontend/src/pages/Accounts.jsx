@@ -81,13 +81,7 @@ const Accounts = () => {
 
   return (
     <div className="h-full grid-cols-12 grid-rows-12">
-      <DataTable
-        columns={columns}
-        rows={rows}
-        loading={false}
-        search
-        addButton
-      />
+      <DataTable columns={columns} rows={rows} loading={false} search button />
     </div>
   );
 };
