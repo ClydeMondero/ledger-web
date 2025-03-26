@@ -47,7 +47,7 @@ const Dashboard = () => {
     >
       <div className="grid grid-cols-12 gap-4 h-full md:grid-rows-12">
         {/* Balances */}
-        <div className="col-span-12 row-span-4 grid grid-cols-1 gap-4 order-3 md:order-1 md:grid-cols-4">
+        <div className="col-span-12 row-span-4 grid grid-cols-2 gap-4 order-2 md:order-1 md:grid-cols-4">
           <Box />
           <Box />
           <Box />
@@ -55,7 +55,7 @@ const Dashboard = () => {
         </div>
         {/* Transactions */}
         <motion.div
-          className="bg-blue-100 col-span-12  p-5 flex flex-col gap-4 rounded-md overflow-auto order-2 md:col-span-4 md:row-span-8"
+          className="bg-blue-100 col-span-12  p-5 flex flex-col gap-4 rounded-md overflow-auto md:col-span-4 order-3 md:row-span-8 md:order-2"
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
