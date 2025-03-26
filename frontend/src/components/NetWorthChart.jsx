@@ -36,7 +36,11 @@ const NetWorthChart = () => {
   }, []);
 
   return (
-    <ResponsiveContainer width="100%" className="bg-blue-50 p-4 rounded-lg">
+    <ResponsiveContainer
+      width="100%"
+      minHeight="200px"
+      className="bg-blue-50 p-4 rounded-lg"
+    >
       <LineChart data={data}>
         <XAxis dataKey="date" strokeWidth={2} />
         <YAxis strokeWidth={2} />

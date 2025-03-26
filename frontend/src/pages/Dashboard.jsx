@@ -45,9 +45,9 @@ const Dashboard = () => {
       highlightColor="oklch(0.882 0.059
       254.128)"
     >
-      <div className="grid grid-cols-12 grid-rows-12 gap-4 h-full">
+      <div className="grid grid-cols-12 gap-4 h-full md:grid-rows-12">
         {/* Balances */}
-        <div className="col-span-12 row-span-4 grid grid-cols-4 gap-4 ">
+        <div className="col-span-12 row-span-4 grid grid-cols-1 gap-4 order-3 md:order-1 md:grid-cols-4">
           <Box />
           <Box />
           <Box />
@@ -55,7 +55,7 @@ const Dashboard = () => {
         </div>
         {/* Transactions */}
         <motion.div
-          className="bg-blue-100 col-span-4 row-span-8 p-5 flex flex-col gap-4 rounded-md overflow-auto"
+          className="bg-blue-100 col-span-12  p-5 flex flex-col gap-4 rounded-md overflow-auto order-2 md:col-span-4 md:row-span-8"
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -70,7 +70,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="bg-blue-100 col-span-8 row-span-8 rounded-md flex flex-col gap-4 p-5"
+          className="bg-blue-100 col-span-12 rounded-md flex flex-col gap-4 p-5 order-1 md:order-3 md:col-span-8 md:row-span-8"
         >
           <span className="text-2xl font-medium">Net Worth</span>
           <NetWorthChart />

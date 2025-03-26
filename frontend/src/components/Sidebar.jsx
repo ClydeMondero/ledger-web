@@ -102,7 +102,7 @@ const Sidebar = () => {
           onClose={() => setIsModalOpen(false)}
         />
       )}
-      <motion.div className="fixed w-15 h-15 bottom-16 right-8 md:hidden flex items-center justify-center">
+      <motion.div className="fixed w-15 h-15 bottom-16 right-8 md:hidden flex items-center justify-center z-[100]">
         <FaCalculator
           className="text-6xl text-blue-500 cursor-pointer p-4 rounded-full bg-white shadow-md"
           onClick={() => setIsModalOpen(true)}
