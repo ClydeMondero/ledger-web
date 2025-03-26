@@ -32,6 +32,7 @@ export default function DataTable({
 
   useEffect(() => {
     const rowData = filteredRows.find((row) => row.id == rowId);
+    console.log(rowData);
     setModalData(rowData || null);
   }, [rowId]);
 
@@ -126,6 +127,10 @@ export default function DataTable({
             sx={{
               "& .MuiDataGrid-row:hover": {
                 backgroundColor: "#DBEAFE",
+              },
+              "& .MuiDataGrid-cell:focus": {
+                border: "none",
+                outline: "none",
               },
             }}
           />

@@ -67,19 +67,11 @@ const Cards = ({ filteredRows, columns, handleEdit }) => {
                       fontSize: i === 0 ? "1.25rem" : "1rem",
                     }}
                   >
-                    {col.field === "balance" ? (
-                      formatMoney(row[col.field])
-                    ) : col.field === "date" ? (
-                      formatDate(row[col.field])
-                    ) : col.field === "accounts" ? (
-                      <div className="flex items-center gap-2">
-                        <span>{row.from_account}</span>
-                        <FaArrowRight className="text-blue-500 text-xs" />
-                        <span>{row.to_account}</span>
-                      </div>
-                    ) : (
-                      row[col.field]
-                    )}
+                    {col.field === "balance"
+                      ? formatMoney(row[col.field])
+                      : col.field === "date"
+                      ? formatDate(row[col.field])
+                      : row[col.field]}
                   </Typography>
                 )
               )}

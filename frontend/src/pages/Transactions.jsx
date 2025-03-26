@@ -3,11 +3,13 @@ import { FaPen, FaTrash } from "react-icons/fa";
 import DataTable from "../components/DataTable";
 import formatMoney from "../utilities/formatMoney";
 import { formatDate, formatToMMDDYYYY } from "../utilities/formatDate";
+import { useModalStore } from "../store/FormModalStore";
 
 const Transactions = () => {
   const [accounts, setAccounts] = useState(
     Array.from({ length: 20 }, (_, i) => `Account ${i + 1}`)
   );
+  const { openModal } = useModalStore();
 
   const rows = Array.from({ length: 100 }, (_, i) => ({
     id: i + 1,
@@ -16,11 +18,12 @@ const Transactions = () => {
       .split("T")[0],
     payee: `Payee ${i + 1}`,
     balance: (i % 2 === 0 ? 1 : -1) * (i + 1) * 100,
-    to_account: `To Account ${i + 1}`,
-    from_account: `From Account ${i + 1}`,
+    to_account: `Account ${i + 1}`,
+    from_account: `Account ${i + 1}`,
   }));
 
   const handleEdit = (id) => {
+    openModal(id);
     console.log("Edit clicked for ID:", id);
   };
 
@@ -43,18 +46,18 @@ const Transactions = () => {
       },
     },
     {
-      field: "accounts",
-      headerName: "Accounts",
+      field: "from_account",
+      headerName: "From Account",
       headerClassName: "table-header",
       cellClassName: "table-cell",
       flex: 1,
-      renderCell: (params) => (
-        <div className="flex flex-col md:flex-row gap-2">
-          <span>{params.row.from_account}</span>
-          <span className="hidden md:inline">→</span>
-          <span>{params.row.to_account}</span>
-        </div>
-      ),
+    },
+    {
+      field: "to_account",
+      headerName: "To Account",
+      headerClassName: "table-header",
+      cellClassName: "table-cell",
+      flex: 1,
     },
     {
       field: "date",
