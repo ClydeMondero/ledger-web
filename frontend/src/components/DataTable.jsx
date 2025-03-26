@@ -83,6 +83,11 @@ export default function DataTable({
             NEW
           </button>
         )}
+        {sum && (
+          <span className="col-span-12 text-right text-blue-500 font-medium">
+            Total: {formatMoney(total)}
+          </span>
+        )}
       </motion.div>
 
       {/* Display Cards on Medium Screens */}
