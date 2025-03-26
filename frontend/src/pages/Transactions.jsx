@@ -20,13 +20,6 @@ const Transactions = () => {
     from_account: `From Account ${i + 1}`,
   }));
 
-  const handleAddAccount = (newAccount) => {
-    if (!accounts.includes(newAccount)) {
-      setAccounts([...accounts, newAccount]);
-      console.log("New Account Added:", newAccount);
-    }
-  };
-
   const handleEdit = (id) => {
     console.log("Edit clicked for ID:", id);
   };
@@ -116,7 +109,6 @@ const Transactions = () => {
       type: "select",
       required: true,
       options: accounts,
-      onAddOption: handleAddAccount,
     },
     {
       name: "to_account",
@@ -124,7 +116,6 @@ const Transactions = () => {
       type: "select",
       required: true,
       options: accounts,
-      onAddOption: handleAddAccount,
     },
   ];
 

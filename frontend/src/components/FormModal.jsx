@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -8,8 +8,12 @@ import {
   MenuItem,
 } from "@mui/material";
 
-const FormModal = ({ open, onClose, fields }) => {
-  const [formData, setFormData] = useState({});
+const FormModal = ({ open, onClose, fields, modalData }) => {
+  const [formData, setFormData] = useState(modalData || {});
+
+  useEffect(() => {
+    setFormData(modalData || {});
+  }, [modalData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +48,7 @@ const FormModal = ({ open, onClose, fields }) => {
         }}
       >
         <Typography variant="h6" component="h2" mb={2} color="#333">
-          Add New Entry
+          {modalData ? "Edit Ledger" : "Add Ledger"}
         </Typography>
         <form onSubmit={handleSubmit}>
           {fields.map((field) =>

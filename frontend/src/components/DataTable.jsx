@@ -4,8 +4,7 @@ import { FaArrowRight, FaPen, FaPlusCircle } from "react-icons/fa";
 import * as motion from "motion/react-client";
 import formatMoney from "../utilities/formatMoney";
 import FormModal from "./FormModal";
-import { useMediaQuery, Card, CardContent, Typography } from "@mui/material";
-import { formatDate } from "../utilities/formatDate";
+import { useMediaQuery } from "@mui/material";
 import Cards from "./Cards";
 
 export default function DataTable({
@@ -20,6 +19,7 @@ export default function DataTable({
   const [searchText, setSearchText] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
   const [total, setTotal] = useState(0);
+  const [modalData, setModalData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isMediumScreen = useMediaQuery("(max-width: 768px)");
@@ -46,6 +46,10 @@ export default function DataTable({
   };
 
   const handleEdit = (id) => {
+    const rowData = filteredRows.find((row) => row.id === id);
+    setModalData(rowData);
+
+    setIsModalOpen(true);
     console.log("Edit clicked for ID:", id);
   };
 
@@ -84,7 +88,7 @@ export default function DataTable({
           </button>
         )}
         {sum && (
-          <span className="col-span-12 text-right text-blue-500 font-medium">
+          <span className="col-span-12 text-l text-right text-blue-500 font-medium md:hidden">
             Total: {formatMoney(total)}
           </span>
         )}
@@ -133,8 +137,12 @@ export default function DataTable({
       {fields && (
         <FormModal
           open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setModalData(null);
+          }}
           fields={fields}
+          modalData={modalData}
         />
       )}
     </div>

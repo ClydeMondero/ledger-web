@@ -37,7 +37,7 @@ const Accounts = () => {
 
   const accountFields = [
     {
-      name: "accountName",
+      name: "account",
       label: "Account Name",
       type: "text",
       required: true,
