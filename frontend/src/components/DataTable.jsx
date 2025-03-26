@@ -6,6 +6,7 @@ import formatMoney from "../utilities/formatMoney";
 import FormModal from "./FormModal";
 import { useMediaQuery } from "@mui/material";
 import Cards from "./Cards";
+import { useModalStore } from "../store/FormModalStore";
 
 export default function DataTable({
   rows,
@@ -20,7 +21,7 @@ export default function DataTable({
   const [filteredRows, setFilteredRows] = useState(rows);
   const [total, setTotal] = useState(0);
   const [modalData, setModalData] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModalOpen, rowId, openModal, closeModal } = useModalStore();
 
   const isMediumScreen = useMediaQuery("(max-width: 768px)");
 
@@ -28,6 +29,11 @@ export default function DataTable({
     const total = filteredRows.reduce((acc, row) => acc + row[sum], 0);
     setTotal(total);
   }, [filteredRows]);
+
+  useEffect(() => {
+    const rowData = filteredRows.find((row) => row.id == rowId);
+    setModalData(rowData || null);
+  }, [rowId]);
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
@@ -42,14 +48,11 @@ export default function DataTable({
   };
 
   const handleAddClick = () => {
-    setIsModalOpen(true);
+    openModal();
   };
 
   const handleEdit = (id) => {
-    const rowData = filteredRows.find((row) => row.id === id);
-    setModalData(rowData);
-
-    setIsModalOpen(true);
+    openModal(id);
     console.log("Edit clicked for ID:", id);
   };
 
@@ -138,8 +141,7 @@ export default function DataTable({
         <FormModal
           open={isModalOpen}
           onClose={() => {
-            setIsModalOpen(false);
-            setModalData(null);
+            closeModal();
           }}
           fields={fields}
           modalData={modalData}

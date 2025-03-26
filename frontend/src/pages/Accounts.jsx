@@ -1,8 +1,11 @@
 import React from "react";
 import { FaPen, FaTrash } from "react-icons/fa";
 import DataTable from "../components/DataTable";
+import { useModalStore } from "../store/FormModalStore";
 
 const Accounts = () => {
+  const { openModal } = useModalStore();
+
   const rows = [
     { id: 1, account: "Assets:Cash", description: "Cash on hand" },
     { id: 2, account: "Assets:GCash", description: "GCash mobile wallet" },
@@ -51,6 +54,7 @@ const Accounts = () => {
   ];
 
   const handleEdit = (id) => {
+    openModal(id);
     console.log("Edit clicked for ID:", id);
   };
 
