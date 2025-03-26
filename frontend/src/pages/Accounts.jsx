@@ -54,10 +54,6 @@ const Accounts = () => {
     console.log("Edit clicked for ID:", id);
   };
 
-  const handleDelete = (id) => {
-    console.log("Delete clicked for ID:", id);
-  };
-
   const columns = [
     {
       field: "account",
@@ -84,10 +80,6 @@ const Accounts = () => {
           <FaPen
             onClick={() => handleEdit(params.row.id)}
             className="text-blue-400"
-          />
-          <FaTrash
-            onClick={() => handleDelete(params.row.id)}
-            className="text-red-400"
           />
         </div>
       ),

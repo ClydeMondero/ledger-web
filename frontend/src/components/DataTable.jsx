@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaArrowRight, FaPen, FaPlusCircle } from "react-icons/fa";
 import * as motion from "motion/react-client";
 import formatMoney from "../utilities/formatMoney";
 import FormModal from "./FormModal";
+import { useMediaQuery, Card, CardContent, Typography } from "@mui/material";
+import { formatDate } from "../utilities/formatDate";
+import Cards from "./Cards";
 
 export default function DataTable({
   rows,
@@ -18,6 +21,8 @@ export default function DataTable({
   const [filteredRows, setFilteredRows] = useState(rows);
   const [total, setTotal] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const isMediumScreen = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     const total = filteredRows.reduce((acc, row) => acc + row[sum], 0);
@@ -38,6 +43,10 @@ export default function DataTable({
 
   const handleAddClick = () => {
     setIsModalOpen(true);
+  };
+
+  const handleEdit = (id) => {
+    console.log("Edit clicked for ID:", id);
   };
 
   return (
@@ -75,35 +84,47 @@ export default function DataTable({
           </button>
         )}
       </motion.div>
-      <motion.div
-        className="relative"
-        initial={{ opacity: 0, y: -5 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-      >
-        <DataGrid
-          rows={filteredRows}
-          loading={loading}
+
+      {/* Display Cards on Medium Screens */}
+      {isMediumScreen ? (
+        <Cards
+          filteredRows={filteredRows}
           columns={columns}
-          disableRowSelectionOnClick
-          getRowClassName={() => `table-row`}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 6, page: 0 },
-            },
-          }}
-          sx={{
-            "& .MuiDataGrid-row:hover": {
-              backgroundColor: "#DBEAFE",
-            },
-          }}
+          handleEdit={handleEdit}
         />
-        {sum && (
-          <span className="absolute bottom-[1rem] left-4 text-sm text-blue-500 font-medium">
-            Total: {formatMoney(total)}
-          </span>
-        )}
-      </motion.div>
+      ) : (
+        // DataGrid for Larger Screens
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          <DataGrid
+            rows={filteredRows}
+            loading={loading}
+            columns={columns}
+            disableRowSelectionOnClick
+            getRowClassName={() => `table-row`}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 6, page: 0 },
+              },
+            }}
+            sx={{
+              "& .MuiDataGrid-row:hover": {
+                backgroundColor: "#DBEAFE",
+              },
+            }}
+          />
+          {sum && (
+            <span className="absolute bottom-[1rem] left-4 text-sm text-blue-500 font-medium">
+              Total: {formatMoney(total)}
+            </span>
+          )}
+        </motion.div>
+      )}
+
       {fields && (
         <FormModal
           open={isModalOpen}

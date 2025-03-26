@@ -92,10 +92,6 @@ const Transactions = () => {
             onClick={() => handleEdit(params.row.id)}
             className="text-blue-400"
           />
-          <FaTrash
-            onClick={() => handleDelete(params.row.id)}
-            className="text-red-400"
-          />
         </div>
       ),
     },
