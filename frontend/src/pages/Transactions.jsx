@@ -50,18 +50,18 @@ const Transactions = () => {
       },
     },
     {
-      field: "from_account",
-      headerName: "From Account",
+      field: "accounts",
+      headerName: "Accounts",
       headerClassName: "table-header",
       cellClassName: "table-cell",
       flex: 1,
-    },
-    {
-      field: "to_account",
-      headerName: "To Account",
-      headerClassName: "table-header",
-      cellClassName: "table-cell",
-      flex: 1,
+      renderCell: (params) => (
+        <div className="flex flex-col md:flex-row gap-2">
+          <span>{params.row.from_account}</span>
+          <span className="hidden md:inline">→</span>
+          <span>{params.row.to_account}</span>
+        </div>
+      ),
     },
     {
       field: "date",
@@ -80,13 +80,12 @@ const Transactions = () => {
         );
       },
     },
-
     {
       field: "actions",
       headerName: "Actions",
       headerClassName: "table-header",
       cellClassName: "table-cell",
-      width: 150,
+      flex: 1,
       renderCell: (params) => (
         <div className="h-full flex items-center justify-center gap-2">
           <FaPen

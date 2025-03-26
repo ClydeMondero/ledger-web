@@ -14,7 +14,7 @@ const Content = () => {
   const today = new Date().getFullYear();
 
   return (
-    <div className="row-span-12 col-span-10 flex flex-col gap-4">
+    <div className="row-span-12 col-span-12 md:col-span-10 flex flex-col gap-4">
       <motion.span
         className="text-4xl font-semibold p-5"
         key={title} // Ensures animation runs on change

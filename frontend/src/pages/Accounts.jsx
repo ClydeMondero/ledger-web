@@ -64,7 +64,7 @@ const Accounts = () => {
       headerName: "Account",
       headerClassName: "table-header",
       cellClassName: "table-cell",
-      width: 150,
+      flex: 1,
     },
     {
       field: "description",
@@ -78,7 +78,7 @@ const Accounts = () => {
       headerName: "Actions",
       headerClassName: "table-header",
       cellClassName: "table-cell",
-      width: 150,
+      flex: 1,
       renderCell: (params) => (
         <div className="h-full flex items-center justify-center gap-2">
           <FaPen
