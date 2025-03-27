@@ -61,7 +61,7 @@ export default function DataTable({
     <div className="row-span-12 flex flex-col gap-4">
       {/* Search Input */}
       <motion.div
-        className="grid grid-cols-12 gap-4"
+        className="flex gap-4"
         initial={{ opacity: 0, y: -5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -72,9 +72,7 @@ export default function DataTable({
             placeholder="Search..."
             value={searchText}
             onChange={handleSearch}
-            className={`col-span-${
-              button ? 8 : 12
-            } py-3 px-6 border-2 border-blue-100 bg-blue-50 rounded-lg focus:outline-0`}
+            className={`flex-2 py-3 px-6 border-2 border-blue-100 bg-blue-50 rounded-lg focus:outline-0`}
           />
         ) : (
           <div className="col-span-12"></div>
@@ -82,9 +80,7 @@ export default function DataTable({
         {button && (
           <button
             type="button"
-            className={`col-span-${
-              search ? 4 : 12
-            } flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg`}
+            className={`flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg`}
             onClick={handleAddClick}
           >
             <FaPlusCircle />
