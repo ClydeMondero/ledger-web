@@ -88,7 +88,7 @@ class AccountController extends Controller
 
         // Create a ledger entry with an initial balance of 0
         $date = now()->format('Y-m-d');
-        $ledgerEntry = "$date * Opening Balance\n    {$request->name}  0.00\n    Equity:Opening-Balance\n";
+        $ledgerEntry = "$date * Account Creation\n    {$request->name}  0.00\n    Equity:Opening-Balance\n";
 
         // Append the entry to the ledger file
         $writeSuccess = file_put_contents($this->ledgerFile, $ledgerEntry . "\n", FILE_APPEND);
@@ -187,6 +187,43 @@ class AccountController extends Controller
         return response()->json([
             'message' => 'Account updated successfully in database and Ledger.',
             'account' => $account,
+            'success' => true
+        ]);
+    }
+
+    /**
+     * Get Account Balance
+     */
+
+    public function get_balance(string $id)
+    {
+        // Find the account in the database
+        $account = Account::find($id);
+
+        if (!$account) {
+            return response()->json([
+                'message' => 'Account not found.',
+                'success' => false
+            ]);
+        }
+
+        $process = new Process([$this->ledgerPath, '-f', $this->ledgerFile, 'balance', $account->name, '--empty']);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            return response()->json([
+                'message' => 'Failed to fetch balance from Ledger.',
+                'error' => $process->getErrorOutput(),
+                'success' => false
+            ]);
+        }
+
+        $balanceOutput = trim($process->getOutput());
+
+        return response()->json([
+            'message' => 'Account balance fetched successfully.',
+            'account' => $account,
+            'balance' => $balanceOutput,
             'success' => true
         ]);
     }
