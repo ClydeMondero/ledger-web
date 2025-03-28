@@ -49,6 +49,7 @@ class AccountController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:accounts,name',
             'description' => 'nullable|string|max:1000',
+            'balance' => 'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -84,11 +85,12 @@ class AccountController extends Controller
         $account = Account::create([
             'name' => $request->name,
             'description' => $request->description,
+            'balance' => $request->balance,
         ]);
 
         // Create a ledger entry with an initial balance of 0
         $date = now()->format('Y-m-d');
-        $ledgerEntry = "$date * Account Creation\n    {$request->name}  0.00\n    Equity:Opening-Balance\n";
+        $ledgerEntry = "$date * Account Creation\n    {$request->name}  {$request->balance}\n    Equity:Opening-Balance\n";
 
         // Append the entry to the ledger file
         $writeSuccess = file_put_contents($this->ledgerFile, $ledgerEntry . "\n", FILE_APPEND);
@@ -115,7 +117,7 @@ class AccountController extends Controller
         $balanceOutput = trim($process->getOutput());
 
         return response()->json([
-            'message' => 'Account created successfully in database and Ledger with an initial balance of 0.',
+            'message' => "Account created successfully in database and Ledger with an initial balance of {$request->balance}",
             'account' => $account,
             'balance' => $balanceOutput,
             'success' => true
@@ -192,9 +194,30 @@ class AccountController extends Controller
     }
 
     /**
-     * Get Account Balance
+     * Get Accounts Info
      */
 
+    public function get_info()
+    {
+        $accounts = Account::all();
+
+        if (!$accounts) {
+            return response()->json([
+                'message' => 'Accounts not found.',
+                'success' => false
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Accounts fetched successfully.',
+            'accounts' => $accounts,
+            'success' => true
+        ]);
+    }
+
+    /**
+     * Get Account Balance
+     */
     public function get_balance(string $id)
     {
         // Find the account in the database
