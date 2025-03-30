@@ -51,6 +51,12 @@ const Accounts = () => {
       type: "text",
       required: false,
     },
+    {
+      name: "balance",
+      label: "Balance",
+      type: "text",
+      required: true,
+    },
   ];
 
   const handleEdit = (id) => {

@@ -32,7 +32,6 @@ export default function DataTable({
 
   useEffect(() => {
     const rowData = filteredRows.find((row) => row.id == rowId);
-    console.log(rowData);
     setModalData(rowData || null);
   }, [rowId]);
 
