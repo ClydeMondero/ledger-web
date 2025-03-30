@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Account;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+
+class TransactionController extends Controller
+{
+    private $ledgerPath;
+    private $ledgerFile;
+
+    public function __construct()
+    {
+        $this->ledgerPath = storage_path('app/ledger/ledger.exe');
+        $this->ledgerFile = storage_path('app/ledger/transactions.ledger');
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $transactions = Transaction::all();
+
+        if (!$transactions) {
+            return response()->json([
+                'message' => 'Transactions not found.',
+                'success' => false
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Transactions fetched successfully.',
+            'transactions' => $transactions,
+            'success' => true
+        ]);
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+
+        // Validate using Validator
+        $validator = Validator::make($request->all(), [
+            'payee' => 'required|string|max:255',
+            'balance' => 'required|integer',
+            'from_account' => 'required|string|exists:accounts,name',
+            'to_account' => 'required|string|exists:accounts,name',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+                'success' => false
+            ]);
+        }
+
+        // Create the account in the database
+        $transaction = Transaction::create([
+            'payee' => $request->payee,
+            'balance' => $request->balance,
+            'from_account' => $request->from_account,
+            'to_account' => $request->to_account,
+        ]);
+
+
+        // Update accounts balance in the database
+        $fromAccount = Account::where('name', $request->from_account)->first();
+        $fromAccount->balance -= $request->balance;
+        $fromAccount->save();
+
+        $toAccount = Account::where('name', $request->to_account)->first();
+        $toAccount->balance += $request->balance;
+        $toAccount->save();
+
+        // Create a ledger entry with an initial balance of 0
+        $date = now()->format('Y-m-d');
+        $ledgerEntry = "$date * {$request->payee}\n    {$request->to_account}  {$request->balance}\n    {$request->from_account}\n";
+
+        // Append the entry to the ledger file
+        $writeSuccess = file_put_contents($this->ledgerFile, $ledgerEntry . "\n", FILE_APPEND);
+
+        if ($writeSuccess === false) {
+            return response()->json([
+                'message' => 'Failed to write to Ledger file.',
+                'success' => false
+            ]);
+        }
+
+        return response()->json([
+            'message' => "Transaction created successfully.",
+            'transaction' => $transaction,
+            'success' => true
+        ]);
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+}

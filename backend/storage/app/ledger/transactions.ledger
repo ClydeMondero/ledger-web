@@ -1,4 +1,13 @@
-2025-03-28 * Account Creation
-    Assets  20
+2025-03-30 * Account Creation
+    Income:Allowance  200
     Equity:Opening-Balance
+
+2025-03-30 * Account Creation
+    Assets:Checkings  0
+    Equity:Opening-Balance
+
+
+2025-03-30 * Allowance from Mommy
+    Assets:Checkings  20
+    Income:Allowance
 
