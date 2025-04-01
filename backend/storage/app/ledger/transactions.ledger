@@ -1,13 +1,20 @@
-2025-03-30 * Account Creation
-    Income:Allowance  200
+2025-04-01 * Account Creation
+    Expenses:Food  0
     Equity:Opening-Balance
 
-2025-03-30 * Account Creation
-    Assets:Checkings  0
+2025-04-01 * Account Creation
+    Assets:Checkings  200
     Equity:Opening-Balance
 
+2025-04-01 * Bought Food
+    Expenses:Food  100
+    Assets:Checkings ;transacId:1
 
-2025-03-30 * Allowance from Mommy
-    Assets:Checkings  20
-    Income:Allowance
+2025-04-01 * Reversal of Bought Food
+    Assets:Checkings  200
+    Expenses:Food ;transacId:1-reversed
+
+2025-04-01 * Bought Food
+    Expenses:Food  200
+    Assets:Checkings ;transacId:1
 

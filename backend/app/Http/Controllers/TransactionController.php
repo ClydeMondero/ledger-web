@@ -46,7 +46,6 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-
         // Validate using Validator
         $validator = Validator::make($request->all(), [
             'payee' => 'required|string|max:255',
@@ -81,9 +80,9 @@ class TransactionController extends Controller
         $toAccount->balance += $request->balance;
         $toAccount->save();
 
-        // Create a ledger entry with an initial balance of 0
+        // Create a ledger entry
         $date = now()->format('Y-m-d');
-        $ledgerEntry = "$date * {$request->payee}\n    {$request->to_account}  {$request->balance}\n    {$request->from_account}\n";
+        $ledgerEntry = "$date * {$request->payee}\n    {$request->to_account}  {$request->balance}\n    {$request->from_account} ;transacId:{$transaction->id}\n";
 
         // Append the entry to the ledger file
         $writeSuccess = file_put_contents($this->ledgerFile, $ledgerEntry . "\n", FILE_APPEND);
@@ -108,6 +107,105 @@ class TransactionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validate using Validator
+        $validator = Validator::make($request->all(), [
+            'payee' => 'required|string|max:255',
+            'balance' => 'required|integer',
+            'from_account' => 'required|string|exists:accounts,name',
+            'to_account' => 'required|string|exists:accounts,name',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $validator->errors(),
+                'success' => false
+            ]);
+        }
+
+        // Get transaction
+        $transaction = Transaction::find($id);
+        if (!$transaction) {
+            return response()->json([
+                'message' => 'Transaction not found.',
+                'success' => false
+            ]);
+        }
+
+        // Reverse previous account changes in database
+        $previous_balance = $transaction->balance;
+
+        $from_account = Account::where('name', $transaction->from_account)->first();
+        if (!$from_account) {
+            return response()->json([
+                'message' => 'From Account not found',
+                'success' => false
+            ]);
+        }
+        $to_account = Account::where('name', $transaction->to_account)->first();
+        if (!$to_account) {
+            return response()->json([
+                'message' => 'To Account not found',
+                'success' => false
+            ]);
+        }
+
+        $from_account->balance += $previous_balance;
+        $to_account->balance -= $previous_balance;
+
+        // Save changes to database
+        $from_account->save();
+        $to_account->save();
+
+        // Reverse changes in Ledger file
+        $date = now()->format('Y-m-d');
+        $ledgerEntry = "$date * Reversal of {$request->payee}\n    {$request->from_account}  {$request->balance}\n    {$request->to_account} ;transacId:{$transaction->id}-reversed\n";
+
+        // Append the entry to the ledger file
+        $writeSuccess = file_put_contents($this->ledgerFile, $ledgerEntry . "\n", FILE_APPEND);
+
+        if ($writeSuccess === false) {
+            return response()->json([
+                'message' => 'Failed to write to Ledger file.',
+                'success' => false
+            ]);
+        }
+
+        // Update transaction changes in database
+        $transaction->update([
+            'payee' => $request->payee,
+            'balance' => $request->balance,
+            'from_account' => $request->from_account,
+            'to_account' => $request->to_account,
+        ]);
+
+        // Update accounts balance in the database
+        $fromAccount = Account::where('name', $request->from_account)->first();
+        $fromAccount->balance -= $request->balance;
+        $fromAccount->save();
+
+        $toAccount = Account::where('name', $request->to_account)->first();
+        $toAccount->balance += $request->balance;
+        $toAccount->save();
+
+        // Update changes in Ledger file
+        $date = now()->format('Y-m-d');
+        $ledgerEntry = "$date * {$request->payee}\n    {$request->to_account}  {$request->balance}\n    {$request->from_account} ;transacId:{$transaction->id}\n";
+
+        // Append the entry to the ledger file
+        $writeSuccess = file_put_contents($this->ledgerFile, $ledgerEntry . "\n", FILE_APPEND);
+
+        if ($writeSuccess === false) {
+            return response()->json([
+                'message' => 'Failed to write to Ledger file.',
+                'success' => false
+            ]);
+        }
+
+        return response()->json([
+            'message' => "Transaction updated successfully.",
+            'transaction' => $transaction,
+            'success' => true
+        ]);
     }
 }
