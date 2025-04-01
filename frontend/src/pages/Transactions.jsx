@@ -4,28 +4,27 @@ import DataTable from "../components/DataTable";
 import formatMoney from "../utilities/formatMoney";
 import { formatDate, formatToMMDDYYYY } from "../utilities/formatDate";
 import { useModalStore } from "../store/FormModalStore";
+import { useQuery } from "@tanstack/react-query";
+import { getAccountsOptions } from "../services/accountService";
+import { getTransactions } from "../services/transactionService";
 
 const Transactions = () => {
-  const [accounts, setAccounts] = useState(
-    Array.from({ length: 20 }, (_, i) => `Account ${i + 1}`)
-  );
   const { openModal } = useModalStore();
-
-  const rows = Array.from({ length: 100 }, (_, i) => ({
-    id: i + 1,
-    date: new Date(Date.now() - i * 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split("T")[0],
-    payee: `Payee ${i + 1}`,
-    balance: (i % 2 === 0 ? 1 : -1) * (i + 1) * 100,
-    to_account: `Account ${i + 1}`,
-    from_account: `Account ${i + 1}`,
-  }));
 
   const handleEdit = (id) => {
     openModal(id);
     console.log("Edit clicked for ID:", id);
   };
+
+  const { data: accountOptionData } = useQuery({
+    queryKey: ["accountOptions"],
+    queryFn: getAccountsOptions,
+  });
+
+  const { data: transactionData, isLoading } = useQuery({
+    queryKey: ["transactions"],
+    queryFn: getTransactions,
+  });
 
   const columns = [
     {
@@ -60,7 +59,7 @@ const Transactions = () => {
       flex: 1,
     },
     {
-      field: "date",
+      field: "created_at",
       headerName: "Date",
       headerClassName: "table-header",
       cellClassName: "table-cell",
@@ -111,14 +110,14 @@ const Transactions = () => {
       label: "From Account",
       type: "select",
       required: true,
-      options: accounts,
+      options: accountOptionData?.accounts || [],
     },
     {
       name: "to_account",
       label: "To Account",
       type: "select",
       required: true,
-      options: accounts,
+      options: accountOptionData?.accounts || [],
     },
   ];
 
@@ -126,7 +125,7 @@ const Transactions = () => {
     <div className="h-full grid-cols-12 grid-rows-12">
       <DataTable
         columns={columns}
-        rows={rows}
+        rows={transactionData?.transactions || []}
         fields={transactionFields}
         loading={false}
         search

@@ -1,46 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaPen, FaTrash } from "react-icons/fa";
 import DataTable from "../components/DataTable";
 import { useModalStore } from "../store/FormModalStore";
+import { getAccounts } from "../services/accountService";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Accounts = () => {
   const { openModal } = useModalStore();
+  const queryClient = useQueryClient();
 
-  const rows = [
-    { id: 1, account: "Assets:Cash", description: "Cash on hand" },
-    { id: 2, account: "Assets:GCash", description: "GCash mobile wallet" },
-    {
-      id: 3,
-      account: "Assets:Savings",
-      description: "Savings account with BPI",
-    },
-    { id: 4, account: "Assets:DebitCard", description: "Debit card" },
-    { id: 5, account: "Assets:CreditCard", description: "Credit card" },
-    { id: 6, account: "Assets:Stocks", description: "Stocks" },
-    { id: 7, account: "Assets:Bonds", description: "Bonds" },
-    {
-      id: 8,
-      account: "Assets:MutualFund",
-      description: "Mutual fund",
-    },
-    { id: 9, account: "Assets:RealEstate", description: "Real estate" },
-    { id: 10, account: "Assets:Other", description: "Other assets" },
-    {
-      id: 11,
-      account: "Liabilities:ShortTerm",
-      description: "Short-term liabilities",
-    },
-    {
-      id: 12,
-      account: "Liabilities:LongTerm",
-      description: "Long-term liabilities",
-    },
-    { id: 13, account: "Liabilities:CreditCard", description: "Credit card" },
-  ];
+  const { data, isLoading } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: getAccounts,
+  });
 
   const accountFields = [
     {
-      name: "account",
+      name: "name",
       label: "Account Name",
       type: "text",
       required: true,
@@ -51,12 +27,6 @@ const Accounts = () => {
       type: "text",
       required: false,
     },
-    {
-      name: "balance",
-      label: "Balance",
-      type: "text",
-      required: true,
-    },
   ];
 
   const handleEdit = (id) => {
@@ -66,7 +36,7 @@ const Accounts = () => {
 
   const columns = [
     {
-      field: "account",
+      field: "name",
       headerName: "Account",
       headerClassName: "table-header",
       cellClassName: "table-cell",
@@ -100,9 +70,9 @@ const Accounts = () => {
     <div className="h-full grid-cols-12 grid-rows-12">
       <DataTable
         columns={columns}
-        rows={rows}
+        rows={data?.accounts || []}
         fields={accountFields}
-        loading={false}
+        loading={isLoading}
         search
         button
       />

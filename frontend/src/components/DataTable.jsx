@@ -26,6 +26,10 @@ export default function DataTable({
   const isMediumScreen = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
+    setFilteredRows(rows);
+  }, [rows]);
+
+  useEffect(() => {
     const total = filteredRows.reduce((acc, row) => acc + row[sum], 0);
     setTotal(total);
   }, [filteredRows]);
