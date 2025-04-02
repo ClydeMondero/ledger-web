@@ -1,20 +1,30 @@
-2025-04-01 * Account Creation
-    Expenses:Food  0
+2025-04-02 * Account Update
+    test2  -0.00
+    Assets:Checkings  0.00
+
+2025-04-02 * Account Update
+    Assets:Checkings  0.00 ; Account details updated
+
+2025-04-02 * Account Creation
+    Income:Allowance  0
     Equity:Opening-Balance
 
-2025-04-01 * Account Creation
-    Assets:Checkings  200
+2025-04-02 * Account Creation
+    Assets:GCash  160
     Equity:Opening-Balance
 
-2025-04-01 * Bought Food
-    Expenses:Food  100
-    Assets:Checkings ;transacId:1
+2025-04-02 * Account Update
+    Assets:GCash  0.00 ; Account details updated
 
-2025-04-01 * Reversal of Bought Food
-    Assets:Checkings  200
-    Expenses:Food ;transacId:1-reversed
+2025-04-02 * Withdraw
+    Assets:Checkings  100
+    Assets:GCash ;transacId:1
 
-2025-04-01 * Bought Food
-    Expenses:Food  200
-    Assets:Checkings ;transacId:1
+2025-04-02 * Reversal of Withdraw
+    Assets:GCash  160
+    Assets:Checkings ;transacId:1-reversed
+
+2025-04-02 * Withdraw
+    Assets:Checkings  160
+    Assets:GCash ;transacId:1
 

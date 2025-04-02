@@ -24,20 +24,20 @@ class AccountController extends Controller
      */
     public function index()
     {
-        //get accounts from ledger file
-        $process = new Process([$this->ledgerPath, '-f', $this->ledgerFile,  'accounts', "--empty"]);
-        $process->run();
+        $accounts = Account::pluck('name')->toArray();
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
+        if (empty($accounts)) {
+            return response()->json([
+                'message' => 'Accounts not found.',
+                'success' => false
+            ]);
         }
 
-        // Get the output as a single string
-        $output = $process->getOutput();
-
-        $accounts = preg_split('/\r\n|\r|\n/', trim($output));
-
-        return response()->json(['message' => "Successfully fetched accounts.", 'accounts' => $accounts, 'success' => "true"]);
+        return response()->json([
+            'message' => 'Accounts fetched successfully.',
+            'accounts' => $accounts,
+            'success' => true
+        ]);
     }
 
     /**
@@ -45,11 +45,13 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
+        \Log::info($request->all());
+
         // Validate using Validator
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:accounts,name',
             'description' => 'nullable|string|max:1000',
-            'balance' => 'required|integer'
+            'balance' => 'nullable|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -102,24 +104,9 @@ class AccountController extends Controller
             ]);
         }
 
-        // Fetch the balance only if the write was successful
-        $process = new Process([$this->ledgerPath, '-f', $this->ledgerFile, 'balance', $request->name, '--empty']);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            return response()->json([
-                'message' => 'Failed to fetch balance from Ledger.',
-                'error' => $process->getErrorOutput(),
-                'success' => false
-            ]);
-        }
-
-        $balanceOutput = trim($process->getOutput());
-
         return response()->json([
             'message' => "Account created successfully in database and Ledger with an initial balance of {$request->balance}",
             'account' => $account,
-            'balance' => $balanceOutput,
             'success' => true
         ]);
     }
@@ -132,7 +119,7 @@ class AccountController extends Controller
     {
         // Validate using Validator
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:accounts,name',
+            'name' => 'required|string|max:255|unique:accounts,name,' . $id,
             'description' => 'nullable|string|max:1000',
         ]);
 
