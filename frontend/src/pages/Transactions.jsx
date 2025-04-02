@@ -4,16 +4,20 @@ import DataTable from "../components/DataTable";
 import formatMoney from "../utilities/formatMoney";
 import { formatDate, formatToMMDDYYYY } from "../utilities/formatDate";
 import { useModalStore } from "../store/FormModalStore";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAccountsOptions } from "../services/accountService";
-import { getTransactions } from "../services/transactionService";
+import {
+  getTransactions,
+  postTransaction,
+  putTransaction,
+} from "../services/transactionService";
 
 const Transactions = () => {
   const { openModal } = useModalStore();
+  const queryClient = useQueryClient();
 
   const handleEdit = (id) => {
     openModal(id);
-    console.log("Edit clicked for ID:", id);
   };
 
   const { data: accountOptionData } = useQuery({
@@ -24,6 +28,28 @@ const Transactions = () => {
   const { data: transactionData, isLoading } = useQuery({
     queryKey: ["transactions"],
     queryFn: getTransactions,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: postTransaction,
+    onSuccess: () => {
+      // console.log("Account successfully added.");
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+    onError: (error) => {
+      console.error("Error creating account: " + error.message);
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: putTransaction,
+    onSuccess: () => {
+      // console.log("Account successfully added.");
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+    onError: (error) => {
+      console.error("Error creating account: " + error.message);
+    },
   });
 
   const columns = [
@@ -130,6 +156,8 @@ const Transactions = () => {
         loading={false}
         search
         button
+        createMutation={createMutation}
+        updateMutation={updateMutation}
       />
     </div>
   );

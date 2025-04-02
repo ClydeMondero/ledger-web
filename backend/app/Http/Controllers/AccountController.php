@@ -59,7 +59,7 @@ class AccountController extends Controller
                 'message' => 'Validation failed.',
                 'errors' => $validator->errors(),
                 'success' => false
-            ]);
+            ], 422);
         }
 
         // Check if account exists in Ledger CLI
@@ -71,7 +71,7 @@ class AccountController extends Controller
                 'message' => 'Failed to fetch accounts from Ledger.',
                 'error' => $process->getErrorOutput(),
                 'success' => false
-            ]);
+            ], 500);
         }
 
         $accounts = preg_split('/\r\n|\r|\n/', trim($process->getOutput()));
@@ -80,7 +80,7 @@ class AccountController extends Controller
             return response()->json([
                 'message' => 'Account already exists in Ledger.',
                 'success' => false
-            ]);
+            ], 409);
         }
 
         // Create the account in the database
@@ -101,7 +101,7 @@ class AccountController extends Controller
             return response()->json([
                 'message' => 'Failed to write to Ledger file.',
                 'success' => false
-            ]);
+            ], 500);
         }
 
         return response()->json([
@@ -128,7 +128,7 @@ class AccountController extends Controller
                 'message' => 'Validation failed.',
                 'errors' => $validator->errors(),
                 'success' => false
-            ]);
+            ], 422);
         }
 
         // Find the account in the database
@@ -137,7 +137,7 @@ class AccountController extends Controller
             return response()->json([
                 'message' => 'Account not found.',
                 'success' => false
-            ]);
+            ], 404);
         }
 
         // Check if the account name was changed
@@ -170,7 +170,7 @@ class AccountController extends Controller
             return response()->json([
                 'message' => 'Failed to write to Ledger file.',
                 'success' => false
-            ]);
+            ], 500);
         }
 
         return response()->json([

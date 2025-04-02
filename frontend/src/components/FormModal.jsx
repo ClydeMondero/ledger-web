@@ -7,9 +7,18 @@ import {
   Typography,
   MenuItem,
 } from "@mui/material";
+import { useModalStore } from "../store/FormModalStore";
 
-const FormModal = ({ open, onClose, fields, modalData }) => {
+const FormModal = ({
+  open,
+  onClose,
+  fields,
+  modalData,
+  createMutation,
+  updateMutation,
+}) => {
   const [formData, setFormData] = useState(modalData || {});
+  const { rowId } = useModalStore();
 
   useEffect(() => {
     setFormData(modalData || {});
@@ -22,7 +31,11 @@ const FormModal = ({ open, onClose, fields, modalData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    if (rowId) {
+      updateMutation.mutate({ rowId, ...formData });
+    } else {
+      createMutation.mutate(formData);
+    }
     setFormData({});
     onClose();
   };

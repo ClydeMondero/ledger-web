@@ -16,6 +16,8 @@ export default function DataTable({
   button = false,
   sum,
   fields,
+  createMutation,
+  updateMutation,
 }) {
   const [searchText, setSearchText] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
@@ -149,6 +151,8 @@ export default function DataTable({
           }}
           fields={fields}
           modalData={modalData}
+          createMutation={createMutation}
+          updateMutation={updateMutation}
         />
       )}
     </div>

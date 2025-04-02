@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { FaPen, FaTrash } from "react-icons/fa";
 import DataTable from "../components/DataTable";
 import { useModalStore } from "../store/FormModalStore";
-import { getAccounts } from "../services/accountService";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getAccounts,
+  postAccount,
+  putAccount,
+} from "../services/accountService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Accounts = () => {
-  const { openModal } = useModalStore();
+  const { rowId, openModal } = useModalStore();
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
@@ -14,7 +18,49 @@ const Accounts = () => {
     queryFn: getAccounts,
   });
 
-  const accountFields = [
+  const createMutation = useMutation({
+    mutationFn: postAccount,
+    onSuccess: () => {
+      // console.log("Account successfully added.");
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+    },
+    onError: (error) => {
+      console.error("Error creating account: " + error.message);
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: putAccount,
+    onSuccess: () => {
+      // console.log("Account successfully updated.");
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+    },
+    onError: (error) => {
+      console.error("Error creating account: " + error.message);
+    },
+  });
+
+  const addAccountFields = [
+    {
+      name: "name",
+      label: "Account Name",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "description",
+      label: "Description",
+      type: "text",
+      required: false,
+    },
+    {
+      name: "balance",
+      label: "Balance",
+      type: "number",
+      required: true,
+    },
+  ];
+  const editAccountFields = [
     {
       name: "name",
       label: "Account Name",
@@ -31,7 +77,6 @@ const Accounts = () => {
 
   const handleEdit = (id) => {
     openModal(id);
-    console.log("Edit clicked for ID:", id);
   };
 
   const columns = [
@@ -71,10 +116,12 @@ const Accounts = () => {
       <DataTable
         columns={columns}
         rows={data?.accounts || []}
-        fields={accountFields}
+        fields={rowId ? editAccountFields : addAccountFields}
         loading={isLoading}
         search
         button
+        createMutation={createMutation}
+        updateMutation={updateMutation}
       />
     </div>
   );

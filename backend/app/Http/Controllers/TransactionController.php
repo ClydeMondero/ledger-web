@@ -59,17 +59,16 @@ class TransactionController extends Controller
                 'message' => 'Validation failed.',
                 'errors' => $validator->errors(),
                 'success' => false
-            ]);
+            ], 422);
         }
 
-        // Create the account in the database
+        // Create the transaction in the database
         $transaction = Transaction::create([
             'payee' => $request->payee,
             'balance' => $request->balance,
             'from_account' => $request->from_account,
             'to_account' => $request->to_account,
         ]);
-
 
         // Update accounts balance in the database
         $fromAccount = Account::where('name', $request->from_account)->first();
@@ -91,14 +90,14 @@ class TransactionController extends Controller
             return response()->json([
                 'message' => 'Failed to write to Ledger file.',
                 'success' => false
-            ]);
+            ], 500);
         }
 
         return response()->json([
             'message' => "Transaction created successfully.",
             'transaction' => $transaction,
             'success' => true
-        ]);
+        ], 201);
     }
 
 
@@ -120,7 +119,7 @@ class TransactionController extends Controller
                 'message' => 'Validation failed.',
                 'errors' => $validator->errors(),
                 'success' => false
-            ]);
+            ], 400);
         }
 
         // Get transaction
@@ -129,7 +128,7 @@ class TransactionController extends Controller
             return response()->json([
                 'message' => 'Transaction not found.',
                 'success' => false
-            ]);
+            ], 404);
         }
 
         // Reverse previous account changes in database
@@ -140,14 +139,14 @@ class TransactionController extends Controller
             return response()->json([
                 'message' => 'From Account not found',
                 'success' => false
-            ]);
+            ], 404);
         }
         $to_account = Account::where('name', $transaction->to_account)->first();
         if (!$to_account) {
             return response()->json([
                 'message' => 'To Account not found',
                 'success' => false
-            ]);
+            ], 404);
         }
 
         $from_account->balance += $previous_balance;
@@ -168,7 +167,7 @@ class TransactionController extends Controller
             return response()->json([
                 'message' => 'Failed to write to Ledger file.',
                 'success' => false
-            ]);
+            ], 500);
         }
 
         // Update transaction changes in database
@@ -199,13 +198,13 @@ class TransactionController extends Controller
             return response()->json([
                 'message' => 'Failed to write to Ledger file.',
                 'success' => false
-            ]);
+            ], 500);
         }
 
         return response()->json([
             'message' => "Transaction updated successfully.",
             'transaction' => $transaction,
             'success' => true
-        ]);
+        ], 200);
     }
 }
