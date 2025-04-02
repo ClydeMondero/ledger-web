@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 
 import Sidebar from "./components/Sidebar";
 import Content from "./components/Content";
+import Loader from "./components/Loader";
 
 axios.defaults.baseURL = "http://localhost:8000/api";
 
@@ -17,6 +19,8 @@ const App = () => {
           <Sidebar />
           <Content />
         </div>
+        <ToastContainer position="bottom-right" />
+        <Loader />
       </BrowserRouter>
     </QueryClientProvider>
   );

@@ -11,9 +11,10 @@ import {
   postTransaction,
   putTransaction,
 } from "../services/transactionService";
+import { toast } from "react-toastify";
 
 const Transactions = () => {
-  const { openModal } = useModalStore();
+  const { openModal, togglePending } = useModalStore();
   const queryClient = useQueryClient();
 
   const handleEdit = (id) => {
@@ -32,23 +33,37 @@ const Transactions = () => {
 
   const createMutation = useMutation({
     mutationFn: postTransaction,
-    onSuccess: () => {
-      // console.log("Account successfully added.");
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+
+      togglePending();
+      toast.success(response.message);
     },
     onError: (error) => {
-      console.error("Error creating account: " + error.message);
+      const errorMessage = error.response?.data?.message || error.message;
+
+      togglePending();
+      toast.error(errorMessage);
+
+      console.error("Error creating transaction: " + errorMessage);
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: putTransaction,
-    onSuccess: () => {
-      // console.log("Account successfully added.");
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+
+      togglePending();
+      toast.success(response.message);
     },
     onError: (error) => {
-      console.error("Error creating account: " + error.message);
+      const errorMessage = error.response?.data?.message || error.message;
+
+      togglePending();
+      toast.error(errorMessage);
+
+      console.error("Error updating transaction: " + errorMessage);
     },
   });
 

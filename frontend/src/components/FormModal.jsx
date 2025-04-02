@@ -18,7 +18,7 @@ const FormModal = ({
   updateMutation,
 }) => {
   const [formData, setFormData] = useState(modalData || {});
-  const { rowId } = useModalStore();
+  const { rowId, togglePending } = useModalStore();
 
   useEffect(() => {
     setFormData(modalData || {});
@@ -31,6 +31,9 @@ const FormModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    togglePending();
+
     if (rowId) {
       updateMutation.mutate({ rowId, ...formData });
     } else {

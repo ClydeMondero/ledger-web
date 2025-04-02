@@ -56,7 +56,7 @@ class AccountController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation failed.',
+                'message' => 'There was an issue with your input.',
                 'errors' => $validator->errors(),
                 'success' => false
             ], 422);
@@ -105,7 +105,7 @@ class AccountController extends Controller
         }
 
         return response()->json([
-            'message' => "Account created successfully in database and Ledger with an initial balance of {$request->balance}",
+            'message' => "Account successfully created.",
             'account' => $account,
             'success' => true
         ]);
@@ -125,7 +125,7 @@ class AccountController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation failed.',
+                'message' => 'There is something wrong with your input.',
                 'errors' => $validator->errors(),
                 'success' => false
             ], 422);
@@ -174,7 +174,7 @@ class AccountController extends Controller
         }
 
         return response()->json([
-            'message' => 'Account updated successfully in database and Ledger.',
+            'message' => 'Account updated successfully.',
             'account' => $account,
             'success' => true
         ]);

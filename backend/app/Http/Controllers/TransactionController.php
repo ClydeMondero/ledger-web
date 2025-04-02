@@ -56,11 +56,12 @@ class TransactionController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validation failed.',
+                'message' => 'There was an issue with your input.',
                 'errors' => $validator->errors(),
                 'success' => false
             ], 422);
         }
+
 
         // Create the transaction in the database
         $transaction = Transaction::create([

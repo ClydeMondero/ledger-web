@@ -8,9 +8,10 @@ import {
   putAccount,
 } from "../services/accountService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const Accounts = () => {
-  const { rowId, openModal } = useModalStore();
+  const { rowId, openModal, togglePending } = useModalStore();
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
@@ -20,23 +21,38 @@ const Accounts = () => {
 
   const createMutation = useMutation({
     mutationFn: postAccount,
-    onSuccess: () => {
-      // console.log("Account successfully added.");
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
+
+      togglePending();
+      toast.success(response.message);
     },
     onError: (error) => {
-      console.error("Error creating account: " + error.message);
+      const errorMessage = error.response?.data?.message || error.message;
+
+      togglePending();
+      toast.error(errorMessage);
+
+      console.error("Error creating account: " + errorMessage);
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: putAccount,
-    onSuccess: () => {
-      // console.log("Account successfully updated.");
+
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
+
+      togglePending();
+      toast.success(response.message);
     },
     onError: (error) => {
-      console.error("Error creating account: " + error.message);
+      const errorMessage = error.response?.data?.message || error.message;
+
+      togglePending();
+      toast.error(errorMessage);
+
+      console.error("Error updating account: " + errorMessage);
     },
   });
 

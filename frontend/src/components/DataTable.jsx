@@ -59,7 +59,6 @@ export default function DataTable({
 
   const handleEdit = (id) => {
     openModal(id);
-    console.log("Edit clicked for ID:", id);
   };
 
   return (

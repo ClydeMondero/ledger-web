@@ -28,3 +28,99 @@
     Assets:Checkings  160
     Assets:GCash ;transacId:1
 
+2025-04-02 * Account Creation
+    test  200
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    tes2  3535
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    test22  11
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    ([  4242
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    tetet  4424
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    test55  5757
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    test57  8686
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    test!]!  5757
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    testeee  4042
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    teueu  4244
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    teuea  02044
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    .;,.;  868
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    .;,.;,  575
+    Equity:Opening-Balance
+
+2025-04-02 * Account Creation
+    test{&{&  5757
+    Equity:Opening-Balance
+
+2025-04-02 * Account Update
+    test  0.00 ; Account details updated
+
+2025-04-02 * Account Update
+    Assets:GCash  0.00 ; Account details updated
+
+2025-04-02 * Payee
+    Assets:GCash  4222
+    Income:Allowance ;transacId:2
+
+2025-04-02 * Withdraw
+    test  100
+    Assets:Checkings ;transacId:3
+
+2025-04-02 * Withdraw
+    Assets:GCash  57
+    Income:Allowance ;transacId:4
+
+2025-04-02 * Reversal of Withdraw
+    Assets:GCash  160
+    Assets:Checkings ;transacId:1-reversed
+
+2025-04-02 * Withdraw
+    Assets:Checkings  160
+    Assets:GCash ;transacId:1
+
+2025-04-02 * Account Creation
+    Testttt  575757
+    Equity:Opening-Balance
+
+2025-04-02 * Account Update
+    test22  0.00 ; Account details updated
+
+2025-04-02 * Account Creation
+    Assets  100
+    Equity:Opening-Balance
+
+2025-04-02 * Account Update
+    Assets  0.00 ; Account details updated
+
