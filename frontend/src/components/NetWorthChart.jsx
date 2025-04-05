@@ -9,6 +9,7 @@ import {
   Legend,
   CartesianGrid,
 } from "recharts";
+import { formatToMonthYear } from "../utilities/formatDate";
 
 const NetWorthChart = ({ data }) => {
   return (

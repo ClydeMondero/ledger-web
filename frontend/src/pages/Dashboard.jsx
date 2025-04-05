@@ -4,7 +4,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import NetWorthChart from "../components/NetWorthChart";
 import { useQuery } from "@tanstack/react-query";
 import { getNetworths, getTransactions } from "../services/transactionService";
-import { formatDate } from "../utilities/formatDate";
+import { formatDate, formatToMonthYear } from "../utilities/formatDate";
 import formatMoney from "../utilities/formatMoney";
 
 const Box = ({ balance, account }) => {
@@ -125,7 +125,12 @@ const Dashboard = () => {
           className="bg-blue-100 col-span-12 rounded-md flex flex-col gap-4 p-5 order-1 md:order-3 md:col-span-8 md:row-span-8"
         >
           <span className="text-2xl font-medium">Net Worth</span>
-          <NetWorthChart data={netWorthData?.networths} />
+          <NetWorthChart
+            data={netWorthData?.networths.map((networth) => ({
+              ...networth,
+              date: formatToMonthYear(networth.date),
+            }))}
+          />
         </motion.div>
       </div>
     </SkeletonTheme>

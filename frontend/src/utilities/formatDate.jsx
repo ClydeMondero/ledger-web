@@ -13,3 +13,11 @@ export function formatToMMDDYYYY(dateString) {
     day: "2-digit",
   });
 }
+
+export function formatToMonthYear(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+  });
+}
