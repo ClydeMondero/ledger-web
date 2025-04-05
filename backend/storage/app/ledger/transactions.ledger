@@ -124,3 +124,11 @@
 2025-04-02 * Account Update
     Assets  0.00 ; Account details updated
 
+2025-04-04 * Account Creation
+    Expenses:Food  200
+    Equity:Opening-Balance
+
+2025-04-04 * Comute
+    tes2  200
+    Assets:GCash ;transacId:5
+

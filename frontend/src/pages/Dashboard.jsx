@@ -1,6 +1,10 @@
 import * as motion from "motion/react-client";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import NetWorthChart from "../components/NetWorthChart";
+import { useQuery } from "@tanstack/react-query";
+import { getTransactions } from "../services/transactionService";
+import { formatDate } from "../utilities/formatDate";
+import formatMoney from "../utilities/formatMoney";
 
 const Box = ({ balance, account }) => {
   return (
@@ -18,19 +22,42 @@ const Box = ({ balance, account }) => {
   );
 };
 
-const Transaction = ({ accounts, balance, payee, date }) => {
+const Transaction = ({ from_account, to_account, balance, payee, date }) => {
   return (
     <div className="text-gray-500 bg-blue-50 p-4 rounded-lg">
-      <span className="font-semibold text-lg block">
-        {accounts || <Skeleton />}
+      <span className="font-semibold text-sm block">
+        {from_account + " to " + to_account}
       </span>
       <div className="flex items-center justify-between">
         <span className="text-3xl text-blue-500 font-medium">
-          {balance || <Skeleton />}
+          {formatMoney(balance)}
         </span>
         <div className="text-right">
-          <span className="block">{payee || <Skeleton />}</span>
-          <span className="text-sm">{date || <Skeleton />}</span>
+          <span className="block">{payee}</span>
+          <span className="text-sm">{formatDate(date) + " ago"}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const TransactionSkeleton = () => {
+  return (
+    <div className="text-gray-500 bg-blue-50 p-4 rounded-lg">
+      <span className="font-semibold text-sm block">
+        <Skeleton />
+      </span>
+      <div className="flex items-center justify-between">
+        <span className="text-3xl text-blue-500 font-medium">
+          <Skeleton />
+        </span>
+        <div className="text-right">
+          <span className="block">
+            <Skeleton />
+          </span>
+          <span className="text-sm">
+            <Skeleton />
+          </span>
         </div>
       </div>
     </div>
@@ -38,6 +65,11 @@ const Transaction = ({ accounts, balance, payee, date }) => {
 };
 
 const Dashboard = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["transactions"],
+    queryFn: getTransactions,
+  });
+
   return (
     <SkeletonTheme
       width={100}
@@ -62,8 +94,22 @@ const Dashboard = () => {
         >
           <span className="text-2xl font-medium">Transactions</span>
           <div className="flex flex-col gap-2">
-            <Transaction />
-            <Transaction />
+            {isLoading ? (
+              <TransactionSkeleton />
+            ) : (
+              data?.transactions
+                ?.slice(0, 3)
+                .map((transaction, index) => (
+                  <Transaction
+                    key={index}
+                    from_account={transaction.from_account}
+                    to_account={transaction.to_account}
+                    balance={transaction.balance}
+                    payee={transaction.payee}
+                    date={transaction.created_at}
+                  />
+                ))
+            )}
           </div>
         </motion.div>
         <motion.div
