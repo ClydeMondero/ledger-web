@@ -14,4 +14,5 @@ Route::resource('accounts', AccountController::class);
 /**
  * Transactions
  */
+Route::get('transactions/networth', [TransactionController::class, 'get_networth']);
 Route::resource('transactions', TransactionController::class);

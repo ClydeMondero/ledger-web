@@ -1,8 +1,9 @@
 import * as motion from "motion/react-client";
+import { useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import NetWorthChart from "../components/NetWorthChart";
 import { useQuery } from "@tanstack/react-query";
-import { getTransactions } from "../services/transactionService";
+import { getNetworths, getTransactions } from "../services/transactionService";
 import { formatDate } from "../utilities/formatDate";
 import formatMoney from "../utilities/formatMoney";
 
@@ -65,9 +66,14 @@ const TransactionSkeleton = () => {
 };
 
 const Dashboard = () => {
-  const { data, isLoading } = useQuery({
+  const { data: transactionData, isLoading } = useQuery({
     queryKey: ["transactions"],
     queryFn: getTransactions,
+  });
+
+  const { data: netWorthData } = useQuery({
+    queryKey: ["networths"],
+    queryFn: getNetworths,
   });
 
   return (
@@ -97,7 +103,7 @@ const Dashboard = () => {
             {isLoading ? (
               <TransactionSkeleton />
             ) : (
-              data?.transactions
+              transactionData?.transactions
                 ?.slice(0, 3)
                 .map((transaction, index) => (
                   <Transaction
@@ -119,7 +125,7 @@ const Dashboard = () => {
           className="bg-blue-100 col-span-12 rounded-md flex flex-col gap-4 p-5 order-1 md:order-3 md:col-span-8 md:row-span-8"
         >
           <span className="text-2xl font-medium">Net Worth</span>
-          <NetWorthChart />
+          <NetWorthChart data={netWorthData?.networths} />
         </motion.div>
       </div>
     </SkeletonTheme>

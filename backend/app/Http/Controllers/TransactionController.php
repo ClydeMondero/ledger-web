@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\Process\Process;
 
 
 class TransactionController extends Controller
@@ -207,5 +208,28 @@ class TransactionController extends Controller
             'transaction' => $transaction,
             'success' => true
         ], 200);
+    }
+
+    public function get_networth()
+    {
+        $networths = \DB::select('
+            SELECT
+                DATE_FORMAT(created_at, "%Y-%m") AS date,
+                SUM(CASE
+                    WHEN from_account LIKE "Assets:%" THEN -balance  -- Withdrawals decrease net worth
+                    WHEN to_account LIKE "Assets:%" THEN balance    -- Deposits increase net worth
+                    ELSE 0
+                END) AS netWorth
+            FROM transactions
+            GROUP BY DATE_FORMAT(created_at, "%Y-%m")
+            ORDER BY date
+        ');
+
+
+        return response()->json([
+            'message' => 'Fetched networths successfully.',
+            'networths' => $networths,
+            'success' => true
+        ]);
     }
 }

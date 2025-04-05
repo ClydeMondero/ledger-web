@@ -47,3 +47,12 @@ export const putTransaction = async ({
 
   return response.data;
 };
+
+/**
+ * Get networths
+ */
+export const getNetworths = async () => {
+  const response = await axios.get(`/transactions/networth`);
+
+  return response.data;
+};
