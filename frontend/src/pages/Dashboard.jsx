@@ -20,9 +20,27 @@ const Box = ({ balance, account }) => {
       className="flex flex-col items-center justify-center bg-blue-100 min-h-[125px] p-4  rounded-md"
     >
       <span className="text-blue-500 text-3xl font-bold">
-        {balance || <Skeleton />}
+        {formatMoney(balance) || <Skeleton />}
       </span>
-      <span>{account || <Skeleton />}</span>
+      <span className="text-gray-500">{account || <Skeleton />}</span>
+    </motion.div>
+  );
+};
+
+const BoxSkeleton = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -5 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="flex flex-col items-center justify-center bg-blue-100 min-h-[125px] p-4  rounded-md"
+    >
+      <span className="text-blue-500 text-3xl font-bold">
+        <Skeleton />
+      </span>
+      <span>
+        <Skeleton />
+      </span>
     </motion.div>
   );
 };
@@ -70,7 +88,7 @@ const TransactionSkeleton = () => {
 };
 
 const Dashboard = () => {
-  const { data: transactionData, isLoading } = useQuery({
+  const { data: transactionData, isLoading: isLoadingTransaction } = useQuery({
     queryKey: ["transactions"],
     queryFn: getTransactions,
   });
@@ -80,7 +98,7 @@ const Dashboard = () => {
     queryFn: getNetworths,
   });
 
-  const { data: balancesData } = useQuery({
+  const { data: balancesData, isLoading: isLoadingBalances } = useQuery({
     queryKey: ["balances"],
     queryFn: getBalances,
   });
@@ -95,9 +113,18 @@ const Dashboard = () => {
       <div className="grid grid-cols-12 gap-4 h-full md:grid-rows-12">
         {/* Balances */}
         <div className="col-span-12 row-span-4 grid grid-cols-2 gap-4 order-2 md:order-1 md:grid-cols-4">
-          {Object.entries(balancesData?.balances || {}).map(
-            ([account, balance], index) => (
-              <Box key={index} balance={balance} account={account} />
+          {isLoadingBalances ? (
+            <>
+              <BoxSkeleton />
+              <BoxSkeleton />
+              <BoxSkeleton />
+              <BoxSkeleton />
+            </>
+          ) : (
+            Object.entries(balancesData?.balances || {}).map(
+              ([account, balance], index) => (
+                <Box key={index} balance={balance} account={account} />
+              )
             )
           )}
         </div>
@@ -110,7 +137,7 @@ const Dashboard = () => {
         >
           <span className="text-2xl font-medium">Transactions</span>
           <div className="flex flex-col gap-2">
-            {isLoading ? (
+            {isLoadingTransaction ? (
               <TransactionSkeleton />
             ) : (
               transactionData?.transactions
