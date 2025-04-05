@@ -49,6 +49,15 @@ export const putTransaction = async ({
 };
 
 /**
+ * Get balances
+ */
+export const getBalances = async () => {
+  const response = await axios.get(`/accounts/balances`);
+
+  return response.data;
+};
+
+/**
  * Get networths
  */
 export const getNetworths = async () => {

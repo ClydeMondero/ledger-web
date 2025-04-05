@@ -3,7 +3,11 @@ import { useEffect } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import NetWorthChart from "../components/NetWorthChart";
 import { useQuery } from "@tanstack/react-query";
-import { getNetworths, getTransactions } from "../services/transactionService";
+import {
+  getBalances,
+  getNetworths,
+  getTransactions,
+} from "../services/transactionService";
 import { formatDate, formatToMonthYear } from "../utilities/formatDate";
 import formatMoney from "../utilities/formatMoney";
 
@@ -76,6 +80,11 @@ const Dashboard = () => {
     queryFn: getNetworths,
   });
 
+  const { data: balancesData } = useQuery({
+    queryKey: ["balances"],
+    queryFn: getBalances,
+  });
+
   return (
     <SkeletonTheme
       width={100}
@@ -86,10 +95,11 @@ const Dashboard = () => {
       <div className="grid grid-cols-12 gap-4 h-full md:grid-rows-12">
         {/* Balances */}
         <div className="col-span-12 row-span-4 grid grid-cols-2 gap-4 order-2 md:order-1 md:grid-cols-4">
-          <Box />
-          <Box />
-          <Box />
-          <Box />
+          {Object.entries(balancesData?.balances || {}).map(
+            ([account, balance], index) => (
+              <Box key={index} balance={balance} account={account} />
+            )
+          )}
         </div>
         {/* Transactions */}
         <motion.div

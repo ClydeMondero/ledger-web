@@ -203,37 +203,39 @@ class AccountController extends Controller
     }
 
     /**
-     * Get Account Balance
+     * Get Balances for Core Account Categories
      */
-    public function get_balance(string $id)
+    public function get_balances()
     {
-        // Find the account in the database
-        $account = Account::find($id);
+        $accounts = ['Assets', 'Expenses', 'Income', 'Liabilities'];
+        $balances = [];
 
-        if (!$account) {
-            return response()->json([
-                'message' => 'Account not found.',
-                'success' => false
+        foreach ($accounts as $account) {
+            $process = new Process([
+                $this->ledgerPath,
+                '-f',
+                $this->ledgerFile,
+                'balance',
+                $account,
+                '--empty'
             ]);
+
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                return response()->json([
+                    'message' => "Failed to fetch balance for {$account}.",
+                    'error' => $process->getErrorOutput(),
+                    'success' => false
+                ]);
+            }
+
+            $balances[$account] = explode(' ', trim($process->getOutput()))[0];
         }
-
-        $process = new Process([$this->ledgerPath, '-f', $this->ledgerFile, 'balance', $account->name, '--empty']);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            return response()->json([
-                'message' => 'Failed to fetch balance from Ledger.',
-                'error' => $process->getErrorOutput(),
-                'success' => false
-            ]);
-        }
-
-        $balanceOutput = trim($process->getOutput());
 
         return response()->json([
-            'message' => 'Account balance fetched successfully.',
-            'account' => $account,
-            'balance' => $balanceOutput,
+            'message' => 'Balances fetched successfully.',
+            'balances' => $balances,
             'success' => true
         ]);
     }
