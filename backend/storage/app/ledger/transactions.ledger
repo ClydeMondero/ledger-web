@@ -1,134 +1,28 @@
-2025-04-02 * Account Update
-    test2  -0.00
-    Assets:Checkings  0.00
-
-2025-04-02 * Account Update
-    Assets:Checkings  0.00 ; Account details updated
-
-2025-04-02 * Account Creation
-    Income:Allowance  0
+2025-04-14 * Account Creation
+    Assets:Checkings  103
     Equity:Opening-Balance
 
-2025-04-02 * Account Creation
-    Assets:GCash  160
+2025-04-14 * Account Update
+    Assets:Checkings  -0.00
+    Assets:Cash:Checkings  0.00
+
+2025-04-14 * Account Creation
+    Assets:GCash:  70
     Equity:Opening-Balance
 
-2025-04-02 * Account Update
-    Assets:GCash  0.00 ; Account details updated
-
-2025-04-02 * Withdraw
-    Assets:Checkings  100
-    Assets:GCash ;transacId:1
-
-2025-04-02 * Reversal of Withdraw
-    Assets:GCash  160
-    Assets:Checkings ;transacId:1-reversed
-
-2025-04-02 * Withdraw
-    Assets:Checkings  160
-    Assets:GCash ;transacId:1
-
-2025-04-02 * Account Creation
-    test  200
+2025-04-15 * Account Creation
+    Income:Allowance  200
     Equity:Opening-Balance
 
-2025-04-02 * Account Creation
-    tes2  3535
+2025-04-15 * Allowance from Mommy
+    Assets:Cash:Checkings  200
+    Income:Allowance ;transacId:1
+
+2025-04-15 * Account Creation
+    Expenses:Transportation  0
     Equity:Opening-Balance
 
-2025-04-02 * Account Creation
-    test22  11
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    ([  4242
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    tetet  4424
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    test55  5757
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    test57  8686
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    test!]!  5757
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    testeee  4042
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    teueu  4244
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    teuea  02044
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    .;,.;  868
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    .;,.;,  575
-    Equity:Opening-Balance
-
-2025-04-02 * Account Creation
-    test{&{&  5757
-    Equity:Opening-Balance
-
-2025-04-02 * Account Update
-    test  0.00 ; Account details updated
-
-2025-04-02 * Account Update
-    Assets:GCash  0.00 ; Account details updated
-
-2025-04-02 * Payee
-    Assets:GCash  4222
-    Income:Allowance ;transacId:2
-
-2025-04-02 * Withdraw
-    test  100
-    Assets:Checkings ;transacId:3
-
-2025-04-02 * Withdraw
-    Assets:GCash  57
-    Income:Allowance ;transacId:4
-
-2025-04-02 * Reversal of Withdraw
-    Assets:GCash  160
-    Assets:Checkings ;transacId:1-reversed
-
-2025-04-02 * Withdraw
-    Assets:Checkings  160
-    Assets:GCash ;transacId:1
-
-2025-04-02 * Account Creation
-    Testttt  575757
-    Equity:Opening-Balance
-
-2025-04-02 * Account Update
-    test22  0.00 ; Account details updated
-
-2025-04-02 * Account Creation
-    Assets  100
-    Equity:Opening-Balance
-
-2025-04-02 * Account Update
-    Assets  0.00 ; Account details updated
-
-2025-04-04 * Account Creation
-    Expenses:Food  200
-    Equity:Opening-Balance
-
-2025-04-04 * Comute
-    tes2  200
-    Assets:GCash ;transacId:5
+2025-04-15 * Gas
+    Expenses:Transportation  20
+    Assets:Cash:Checkings ;transacId:2
 

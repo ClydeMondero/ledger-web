@@ -63,7 +63,7 @@ class AccountController extends Controller
         }
 
         // Check if account exists in Ledger CLI
-        $process = new Process([$this->ledgerPath, '-f', $this->ledgerFile,  'accounts', "--empty"]);
+        $process = new Process(['ledger', '-f', $this->ledgerFile,  'accounts', "--empty"]);
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -212,7 +212,7 @@ class AccountController extends Controller
 
         foreach ($accounts as $account) {
             $process = new Process([
-                $this->ledgerPath,
+                'ledger',
                 '-f',
                 $this->ledgerFile,
                 'balance',
