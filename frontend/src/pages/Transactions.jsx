@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPen, FaTrash } from "react-icons/fa";
 import DataTable from "../components/DataTable";
 import formatMoney from "../utilities/formatMoney";

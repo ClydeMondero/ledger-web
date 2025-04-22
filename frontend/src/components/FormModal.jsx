@@ -94,7 +94,7 @@ const FormModal = ({
                   },
                 }}
               >
-                {field.options.slice(0, 5).map((option, index) => (
+                {field.options.map((option, index) => (
                   <MenuItem key={index} value={option}>
                     {option}
                   </MenuItem>

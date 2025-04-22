@@ -1,28 +1,52 @@
-2025-04-14 * Account Creation
-    Assets:Checkings  103
+2025-04-21 * Account Creation
+    Assets:Cash:Checkings  66
     Equity:Opening-Balance
 
-2025-04-14 * Account Update
-    Assets:Checkings  -0.00
-    Assets:Cash:Checkings  0.00
-
-2025-04-14 * Account Creation
-    Assets:GCash:  70
+2025-04-21 * Account Creation
+    Assets:GCash  140
     Equity:Opening-Balance
 
-2025-04-15 * Account Creation
+2025-04-21 * Account Creation
+    Income:Freelancing  2000
+    Equity:Opening-Balance
+
+2025-04-21 * DigiSecu Prototype Payment
+    Assets:GCash  2000
+    Income:Freelancing ;transacId:1
+
+2025-04-21 * Account Creation
+    Expense:SubContracted:MJ  0
+    Equity:Opening-Balance
+
+2025-04-21 * Account Creation
+    Equity  1000
+    Equity:Opening-Balance
+
+2025-04-21 * DigiSecu Prototype Payment
+    Income:Freelancing  1000
+    Equity ;transacId:2
+
+2025-04-21 * DigiSecu Prototype Payment to MJ
+    Expense:SubContracted:MJ  1000
+    Income:Freelancing ;transacId:3
+
+2025-04-22 * Account Creation
     Income:Allowance  200
     Equity:Opening-Balance
 
-2025-04-15 * Allowance from Mommy
-    Assets:Cash:Checkings  200
-    Income:Allowance ;transacId:1
+2025-04-22 * Allowance from mommy
+    Assets:GCash  200
+    Income:Allowance ;transacId:4
 
-2025-04-15 * Account Creation
-    Expenses:Transportation  0
+2025-04-22 * Account Creation
+    Expenses:Food  0
     Equity:Opening-Balance
 
-2025-04-15 * Gas
-    Expenses:Transportation  20
-    Assets:Cash:Checkings ;transacId:2
+2025-04-22 * Canteen
+    Expenses:Food  75
+    Assets:GCash ;transacId:5
+
+2025-04-22 * Canteen
+    Assets:GCash  30
+    Expenses:Food ;transacId:6
 

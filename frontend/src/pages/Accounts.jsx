@@ -23,6 +23,7 @@ const Accounts = () => {
     mutationFn: postAccount,
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["accountOptions"] });
 
       togglePending();
       toast.success(response.message);
